@@ -2,17 +2,22 @@
 
 __not yet finished__
 
-javascript class implementation with inheritance and support for ptivate functions and getters & setters.
+javascript class implementation, features:
+- inheritance
+- read only prooperties
+- private properties
+- getters / setters
+
 
 tested on node.js v0.8.x
 
 
 	var User = Class( {
 		  __name: "" 					// i'm private
-		, _id: { enumerable: true }		// custom defind property
+		, _id: { enumerable: true }		// custom defined property
 		, gender: "m" 					// i'm public, enumerable, writable
 		, $banned: true 				// i'm public, readonly -> access via obj.banned
-		, $$dbConnection: db 			// shared property by _all_ instances of the class
+		, $$dbConnection: db 			// shared property by _all_ instances of the class ( stored on the prototype, overwriting it will overwrite obly the local instance )
 
 		, set name(){
 			console.log( "you are not allowed to change the name!" );

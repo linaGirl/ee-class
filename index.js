@@ -18,7 +18,9 @@
 
 			// collect properties
 
-			return function(){};
+			return function(){
+				var instance = Object.create( proto, clone( properties ) );
+			};
 		};
 
 
