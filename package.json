@@ -1,0 +1,16 @@
+{
+      "author":         "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
+    , "name":           "ee-class"
+    , "description":    "another class implementation"
+    , "version":        "1.0"
+    , "repository": {
+        "url":          "https://github.com/eventEmitter/ee-class"
+    }
+    , "main": "./index.js"
+    , "engines": {
+        "node":         "*"
+    }
+    , "dependencies": {}
+    , "devDependencies": {}
+    , "optionalDependencies": {}
+}
