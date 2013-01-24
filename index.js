@@ -14,13 +14,11 @@
 		createClass = function( classDefinition ){
 			var proto = Object.create( classDefinition && classDefinition.inherits ? classDefinition.inherits : Class )
 				, properties = {}
-				, getters = {}
-				, setters = {};
+				, klass;
 
 			// collect properties
 
-
-			return klass;
+			return function(){};
 		};
 
 
@@ -36,7 +34,8 @@
 	
 
 
+	var Class = module.exports;
 
 
-
-	new module.exports();
+	console.log( ( new ( new Class( {} ) )() ) instanceof Class )
+	console.log( ( Object.create( {} ) ) instanceof {} )
