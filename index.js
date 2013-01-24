@@ -1,23 +1,42 @@
-	
-	
-	
-	module.exports = function( classDefinition ){
-
-	};
+	"use strict";
 
 
+	( function(){
+		var Class, createClass;
 
+		// property cloner
+		var clone = function( input ){
 
-
-
-	module.exports = Class( {
-		inherits: Events
-
-		, hui: {
-			a: 2
 		}
+		
+		
+		// class contructor
+		createClass = function( classDefinition ){
+			var proto = Object.create( classDefinition && classDefinition.inherits ? classDefinition.inherits : Class )
+				, properties = {}
+				, getters = {}
+				, setters = {};
 
-		, init: function( options ){
-			this.parent.init();
-		}
-	} );
+			// collect properties
+
+
+			return klass;
+		};
+
+
+		// the actual class prototype
+		Class = function( classDefinition ){
+			return createClass( classDefinition );
+		};
+		
+
+		// exports
+		module.exports = Class;
+	} )();
+	
+
+
+
+
+
+	new module.exports();
