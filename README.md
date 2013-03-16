@@ -1,55 +1,31 @@
 # ee-class
 
-__not yet finished__
 
-javascript class implementation, features:
-- inheritance
-- read only prooperties
-- private properties
-- getters / setters
+    var Class = require( "ee-class" );
 
 
-tested on node.js v0.8.x
+    var Human = new Class( {
+
+    	  name: ""
+    	, age: 29
+
+    	, init: function( options ){
+    		this.name = options.name;
+    	}
 
 
-	var User = Class( {
-		  __name: "" 					// i'm private
-		, _id: { enumerable: true }		// custom defined property
-		, gender: "m" 					// i'm public, enumerable, writable
-		, $banned: true 				// i'm public, readonly -> access via obj.banned
-		, $$dbConnection: db 			// shared property by _all_ instances of the class ( stored on the prototype, overwriting it will overwrite obly the local instance )
-
-		, set name(){
-			console.log( "you are not allowed to change the name!" );
-		}
-
-		, get name(){
-			return this.__name;
-		}
-
-		, init: function( options ){
-			this.__name = options.name;
-		}
-
-		, sayHi: function(){
-			console.log( "my name is", this.__name );
-		}
-	} );
+    	, sayHello: function( to ){
+    		console.log( "Hi %s, my name is %s and i'm %i years old.", to, this.name, this.age );
+    	}
+    } );
 
 
-	var EEClassUser = Class( {
-		inherits: User
 
-		, isEEClassUser: true
-
-		, init: function( options ){
-			this.parent.init( options );
-		}
-	} );
+    var Boy = new Class( {
+    	inherits: Human
+    	, age: 12
+    } );
 
 
-	var michael = new EEClassUser( { name: "michael" } );
-
-	michael.sayHi(); // my name is michael
-	console.log( michael.name ); // michael
-	console.log( michael.__name ); // access violation
+    var fabian = new Boy( { name: "Fabian" } );
+    fabian.sayHello(); // Hi my name is Fabian and i'm 12 years old.
