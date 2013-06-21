@@ -64,7 +64,8 @@
 	var getClassId = function(){
 		var path = ( /\(([^\:]+)\:/gi.exec( new Error().stack.split( "\n" )[ 3 ] ) || [ null, "" ] )[ 1 ].replace( /\.m?js$/, "" );
 		if ( getRootModulePath() && path.indexOf( getRootModulePath() ) === 0 ){
-			return path.substr( getRootModulePath().length ).replace( /\//g, "." );
+			path = path.substr( getRootModulePath().length );
+			return path.indexOf( "node_modules" === -1 ) ? path.replace( /\//g, "." ) : path.substr( path.lastIndexOf( "node_modules" ) + 13 ).replace( /\//g, "." );
 		}
 
 		return "";
