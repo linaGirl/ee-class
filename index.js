@@ -151,7 +151,7 @@
 			while( k-- ) instance.__defineSetter__( setterKeys[ k ], setters[ setterKeys[ k ] ] );
 
 			// add eventlisteners
-			if ( options && options.on && instance.$events ) instance.on( options.on );
+			if ( options && options.on && typeof instance.on === "function" ) instance.on( options.on );
 
 			// parent 
 			if ( parent ) instance.parent = parent;

@@ -29,3 +29,9 @@
 
     var fabian = new Boy( { name: "Fabian" } );
     fabian.sayHello(); // Hi my name is Fabian and i'm 12 years old.
+
+
+# Version History
+
+- 0.1.0: initial version
+- 0.1.1: fixed integration with eventemitter objects
