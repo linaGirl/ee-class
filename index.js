@@ -48,29 +48,6 @@
 		return properties;
 	}
 
-	var rootModulePath;
-	var getRootModulePath = function(){
-		if ( !rootModulePath ){
-			var getParentPath = function( m ){ return m.parent ? getParentPath( m.parent ) : m.filename; }
-			rootModulePath = getParentPath( module );
-			rootModulePath = rootModulePath.substr( 0 , rootModulePath.lastIndexOf( "/" ) +1 );
-		}
-
-		return rootModulePath;
-	}
-
-
-
-	var getClassId = function(){
-		var path = ( /\(([^\:]+)\:/gi.exec( new Error().stack.split( "\n" )[ 3 ] ) || [ null, "" ] )[ 1 ].replace( /\.m?js$/, "" );
-		if ( getRootModulePath() && path.indexOf( getRootModulePath() ) === 0 ){
-			path = path.substr( getRootModulePath().length );
-			return path.indexOf( "node_modules" === -1 ) ? path.replace( /\//g, "." ) : path.substr( path.lastIndexOf( "node_modules" ) + 13 ).replace( /\//g, "." );
-		}
-
-		return "";
-	}
-
 
 
 	module.exports = function( classDefinition ){
@@ -79,18 +56,28 @@
 			, getters 			= {}
 			, setters 			= {}
 			, staticProperties 	= {}
+			, depth 			= 0
 			, parentClass, keys, i, id, get, set, setterKeys, getterKeys, staticKeys, o, parent;
 
 
 		// collect inherited data
 		if ( classDefinition.inherits ){
-			parentClass 		= classDefinition.inherits.$$__iridium__$$;
-			proto 				= Object.create( parentClass.proto );
-			classProperties 	= clone( parentClass.properties );
-			setters 			= clone( parentClass.setters );
-			getters				= clone( parentClass.getters );
-			staticProperties 	= clone( parentClass.staticProperties );
-			parent 				= parentClass.proto;
+
+			// ee class
+			if ( classDefinition.inherits.$$__iridium__$$ ){
+				parentClass 		= classDefinition.inherits.$$__iridium__$$;
+				proto 				= Object.create( parentClass.proto );
+				classProperties 	= clone( parentClass.properties );
+				setters 			= clone( parentClass.setters );
+				getters				= clone( parentClass.getters );
+				staticProperties 	= clone( parentClass.staticProperties );
+				parent 				= parentClass.proto;
+				depth 				= parentClass.depth;
+			}
+			else {
+				// js class
+				proto 				= Object.create( classDefinition.inherits.prototype );
+			}
 		}
 		
 
@@ -99,31 +86,32 @@
 		i = keys.length;
 
 		while( i-- ){
-			id  = keys[ i ];
-			get = classDefinition.__lookupGetter__( id );
-			set = classDefinition.__lookupSetter__( id );
+			( function( id ){
+				get = classDefinition.__lookupGetter__( id );
+				set = classDefinition.__lookupSetter__( id );
 
-			// separte getters & setters
-			if ( get || set ){
-				if ( get ) getters[ id ] = get;
-				if ( set ) setters[ id ] = set;
-			}
-			// separate static properties
-			else if ( id.indexOf( "static " ) === 0 ){
-				staticProperties[ id.substr( 7 ) ] = classDefinition[ id ];
-			}
-			// the rest
-			else if ( id !== "inherits" ){
-				switch ( typeof classDefinition[ id ] ){
-					case "function":
-						proto[ id ] = classDefinition[ id ];
-						break;
-
-					default:
-						classProperties[ id ] = classDefinition[ id ];
-						break;
+				// separte getters & setters
+				if ( get || set ){
+					if ( get ) getters[ id ] = get;
+					if ( set ) setters[ id ] = set;
 				}
-			}
+				// separate static properties
+				else if ( id.indexOf( "static " ) === 0 ){
+					staticProperties[ id.substr( 7 ) ] = classDefinition[ id ];
+				}
+				// the rest
+				else if ( id !== "inherits" ){
+					switch ( typeof classDefinition[ id ] ){
+						case "function":
+							proto[ id ] = classDefinition[ id ];
+							break;
+
+						default:
+							classProperties[ id ] = classDefinition[ id ];
+							break;
+					}
+				}
+			}.bind( this ) )( keys[ i ] );
 		}
 
 
@@ -131,9 +119,6 @@
 		setterKeys = Object.keys( setters );
 		getterKeys = Object.keys( getters );
 
-		
-		// set class id
-		classProperties.$id = getClassId();
 
 
 		// this is the actual class contructor
@@ -155,7 +140,7 @@
 
 			// parent 
 			if ( parent ) instance.parent = parent;
-
+		
 			// call the class contsructor
 			if ( typeof instance.init === "function" ){
 				contructorResult = instance.init( options || {} );
@@ -175,12 +160,13 @@
 
 		// store class components
 		Object.defineProperty( ClassConstructor, "$$__iridium__$$", { value: {
-			proto: 				proto
+			  proto: 			proto
 			, properties: 		classProperties
 			, setters: 			setters
 			, getters: 			getters
 			, staticProperties: staticProperties	
-		}, writable: false, configurable: false, enumerable: false } );
+			, depth: 			++depth
+		} } );
 
 		return ClassConstructor;
 	}
