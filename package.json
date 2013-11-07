@@ -1,21 +1,25 @@
 {
-      "name"                    : "ee-class"
-    , "description"             : "js class implementation"
-    , "version"                 : "0.1.5"
-    , "homepage"                : "https://github.com/eventEmitter/ee-class"
-    , "author"                  : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)" 
-    , "licence"                 : "MIT"
-    , "os"                      : "linux"
+      "name"                        : "ee-class"
+    , "description"                 : "Javascript Class implementation for node.js"
+    , "version"                     : "0.2.0"
+    , "homepage"                    : "https://github.com/eventEmitter/ee-class"
+    , "author"                      : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)" 
+    , "licence"                     : "mit"
     , "repository": {
-        "url"                   : "https://github.com/eventEmitter/ee-class"
+          "url"                     : "https://github.com/eventEmitter/ee-class.git"
+        , "type"                    : "git"
     }
     , "engines": {
-        "node"                  : ">=0.10.7"
+        "node"                      : ">=v0.10.0"
     }
     , "bugs": {
-        "url"                   : "https://github.com/eventEmitter/ee-class/issues"
+        "url"                       : "https://github.com/eventEmitter/ee-class/issues"
     }
     , "dependencies": {}
     , "devDependencies": {}
     , "optionalDependencies": {}
+    , "keywords"                    : [ "class" ]
+    , "scripts": {
+        "test"                      : "node test.js"
+    }
 }

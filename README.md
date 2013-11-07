@@ -1,37 +1,77 @@
 # ee-class
 
+Javascript Class implementation for node.js
+
+## installation
+
+    npm install ee-class
+
+
+## build status
+
+[![Build Status](https://travis-ci.org/eventEmitter/ee-class.png?branch=master)](https://travis-ci.org/eventEmitter/ee-class)
+
+
+## usage
 
     var Class = require( "ee-class" );
 
 
+    var LifeForm = new Class( {
+        isAlive: false
+
+        , init: function( options ){
+            this.isAlive = !!options.isAlive;
+        }
+    } );
+
+
+
     var Human = new Class( {
+        inherits: LifeForm
+        
+        , name: ""
 
-    	  name: ""
-    	, age: 29
-
-    	, init: function( options ){
-    		this.name = options.name;
-    	}
-
-
-    	, sayHello: function( to ){
-    		console.log( "Hi %s, my name is %s and i'm %i years old.", to, this.name, this.age );
-    	}
+        // pay attention to give the function a name so you can reference it when you are calling the super function
+        , init: function myInitFunction( options ){
+            myInitFunction.super( options );
+            this.name = options.name;
+        }
     } );
 
 
 
     var Boy = new Class( {
-    	inherits: Human
-    	, age: 12
+        inherits: Human
+
+        , age: 0
+
+        // pay attention to give the function a name so you can reference it when you are calling the super function
+        , init: function myInitFunction( options ){
+            myInitFunction.super( options );
+            if ( options.age > 18 ) throw new Error( "Too old to be a boy!" )
+            this.age = options.age;
+        }
+
+
+        , describe: function(){
+            console.log( "Hi, my name is %s, i'm %s years old and i'm " + ( this.isAlive ? "alive :)" : "dead :(" ), this.name, this.age );
+        }
     } );
 
 
-    var fabian = new Boy( { name: "Fabian" } );
-    fabian.sayHello(); // Hi my name is Fabian and i'm 12 years old.
+
+    var fabian = new Boy( {
+          name:     "fabian"
+        , age:      15
+        , isAlive:  true
+    } );
+
+    fabian.describe(); // Hi, my name is fabian, i'm 15 years old and i'm alive :)
 
 
 # Version History
 
 - 0.1.0: initial version
 - 0.1.3: fixed integration with eventemitter objects
+- 0.2.0: Added proper implementation for calling super functions, deprecated the «parent» property
