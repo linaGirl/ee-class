@@ -23,7 +23,7 @@
 		, name: ""
 
 		, init: function init( options ){
-			init.super( options );
+			init.parent( options );
 			this.name = options.name;
 		}
 	} );
@@ -36,7 +36,7 @@
 		, age: 0
 
 		, init: function init( options ){
-			init.super( options );
+			init.parent( options );
 			this.age = options.age;
 		}
 

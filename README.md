@@ -32,9 +32,9 @@ Javascript Class implementation for node.js
         
         , name: ""
 
-        // pay attention to give the function a name so you can reference it when you are calling the super function
+        // pay attention to give the function a name so you can reference it when you are calling the parent function
         , init: function myInitFunction( options ){
-            myInitFunction.super( options );
+            myInitFunction.parent( options );
             this.name = options.name;
         }
     } );
@@ -46,9 +46,9 @@ Javascript Class implementation for node.js
 
         , age: 0
 
-        // pay attention to give the function a name so you can reference it when you are calling the super function
+        // pay attention to give the function a name so you can reference it when you are calling the parent function
         , init: function myInitFunction( options ){
-            myInitFunction.super( options );
+            myInitFunction.parent( options );
             if ( options.age > 18 ) throw new Error( "Too old to be a boy!" )
             this.age = options.age;
         }
@@ -75,3 +75,5 @@ Javascript Class implementation for node.js
 - 0.1.0: initial version
 - 0.1.3: fixed integration with eventemitter objects
 - 0.2.0: Added proper implementation for calling super functions, deprecated the «parent» property
+- 0.2.1: Bugfix for the «super implementation»
+- 0.2.2: Deprecated the «super» property and replaced it with the «parent» property beacuse super is a javascript reserved keyword
