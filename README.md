@@ -77,3 +77,4 @@ Javascript Class implementation for node.js
 - 0.2.0: Added proper implementation for calling super functions, deprecated the «parent» property
 - 0.2.1: Bugfix for the «super implementation»
 - 0.2.2: Deprecated the «super» property and replaced it with the «parent» property beacuse super is a javascript reserved keyword
+- 0.2.3: The constructor takes now n instead of max. arguments
