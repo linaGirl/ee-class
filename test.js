@@ -7,10 +7,18 @@
 
 
 	var LifeForm = new Class( {
-		isAlive: false
+		inherits: Array
+		
+		, isAlive: false
 
 		, init: function( options ){
 			this.isAlive = !!options.isAlive;
+		}
+
+
+
+		, over: function(){
+			//console.log('over lifeform');
 		}
 	} );
 
@@ -25,6 +33,11 @@
 		, init: function init( options ){
 			init.parent( options );
 			this.name = options.name;
+		}
+
+
+		, over: function(){
+			//console.log('over human');
 		}
 	} );
 
@@ -47,6 +60,10 @@
 			assert.equal( this.name, "fabian", "The «fabian» property was not set!");
 			assert.equal( this.isAlive, true, "The «alive» property was not set!");
 		}
+
+		, over: function(){
+			//console.log('over boy');
+		}
 	} );
 
 
@@ -59,3 +76,5 @@
 	} );
 
 	fabian.describe();
+
+	fabian.over();
