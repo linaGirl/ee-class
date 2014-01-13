@@ -79,3 +79,4 @@ Javascript Class implementation for node.js
 - 0.2.2: Deprecated the «super» property and replaced it with the «parent» property beacuse super is a javascript reserved keyword
 - 0.2.3: The constructor takes now n instead of 1 arguments
 - 0.2.4: The constructor may now return a function when overriding the class implementation
+- 0.2.6: Classes expose their defintion now via the «Class.definition» proroperty

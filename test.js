@@ -78,3 +78,5 @@
 	fabian.describe();
 
 	fabian.over();
+
+	//console.log( fabian instanceof LifeForm);
