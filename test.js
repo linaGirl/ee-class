@@ -79,4 +79,34 @@
 
 	fabian.over();
 
+
+
+
+	var MyClass = new Class({
+        init: function(){
+
+        }
+    }, 
+    { 
+    	_values: {
+            value: {
+                name: 'john doe'
+            }
+        }
+        , name: {
+            get: function(){
+                return this._values.name;
+            }
+            , set: function(newValue){
+                this._values.name = newValue;
+                //console.log('set new value', newValue);
+            }
+            , enumerable: true
+        }
+    });
+
+    var x = new MyClass();
+
+    x.name = 'michael';
+   // console.log(x.name);
 	//console.log( fabian instanceof LifeForm);

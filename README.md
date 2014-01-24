@@ -70,6 +70,39 @@ Javascript Class implementation for node.js
     fabian.describe(); // Hi, my name is fabian, i'm 15 years old and i'm alive :)
 
 
+
+# working with propertiy definers
+
+since version 0.2.7 you may pass an object with object property defintions to the class module.
+
+    var MyClass = new Class({
+        init: function(){
+
+        }
+    }, 
+    { 
+        _values: {
+            value: {
+                name: 'john doe'
+            }
+        }
+        , name: {
+            get: function(){
+                return this._values.name;
+            }
+            , set: function(newValue){
+                this._values.name = newValue;
+            }
+            , enumerable: true
+        }
+    });
+
+    var x = new MyClass();
+
+    x.name = 'michael';
+    console.log(x.name); // michael
+
+
 # Version History
 
 - 0.1.0: initial version
@@ -80,3 +113,4 @@ Javascript Class implementation for node.js
 - 0.2.3: The constructor takes now n instead of 1 arguments
 - 0.2.4: The constructor may now return a function when overriding the class implementation
 - 0.2.6: Classes expose their defintion now via the «Class.definition» proroperty
+- 0.2.7: Added support fo Object.defineProperties()
