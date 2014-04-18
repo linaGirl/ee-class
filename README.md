@@ -115,3 +115,5 @@ since version 0.2.7 you may pass an object with object property defintions to th
 - 0.2.6: Classes expose their defintion now via the «Class.definition» proroperty
 - 0.2.7: Added support fo Object.defineProperties()
 - 0.2.8: Removed all occurences of __proto__ in th eclass implementation, replaced the by Object.getPrototypeOf()
+- 0.3.0: Removed the deprecated «parent» property
+- 0.4.0: Removed the default value passed to a class constructor

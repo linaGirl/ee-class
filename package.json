@@ -1,7 +1,7 @@
 {
       "name"                        : "ee-class"
     , "description"                 : "Javascript Class implementation for node.js & ecma script 5 compatible browsers"
-    , "version"                     : "0.3.0"
+    , "version"                     : "0.4.0"
     , "homepage"                    : "https://github.com/eventEmitter/ee-class"
     , "author"                      : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)" 
     , "licence"                     : "mit"
