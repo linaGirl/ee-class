@@ -236,8 +236,7 @@
 
             var instance = new Boy('Dylan', true);
 
-            instance.talk(); // Hi my name is Dylan, i'm alive :)
+            assert.equal(instance.isAlive, true);
+            assert.equal(instance.name, 'Dylan');
         });
-    });
-
-     
+    });     
