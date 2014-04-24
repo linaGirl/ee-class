@@ -1,106 +1,155 @@
 # ee-class
 
-Javascript Class implementation for node.js
+A fast prototype based Javascript Class implementation
 
 ## installation
 
     npm install ee-class
-
 
 ## build status
 
 [![Build Status](https://travis-ci.org/eventEmitter/ee-class.png?branch=master)](https://travis-ci.org/eventEmitter/ee-class)
 
 
-## usage
+## API
 
-    var Class = require( "ee-class" );
+The Class implementation is built on top of javascript prototype based inheritance and ECMA Script property descriptors.
 
+### Constructor
+    
+Classes can be created using the Class function. The function expects exactly one argument, the class definition.
 
-    var LifeForm = new Class( {
-        isAlive: false
+    var MyClass = new Class();
 
-        , init: function( options ){
-            this.isAlive = !!options.isAlive;
-        }
-    } );
+### Class Definition
 
+#### «inherits» property
 
+Objects & Functions on this property are handled as the prototype for the prototype of the class you are creating.
 
-    var Human = new Class( {
-        inherits: LifeForm
-        
-        , name: ""
+    var MyClass = new Class({
+        inherits: Array
+    }); 
 
-        // pay attention to give the function a name so you can reference it when you are calling the parent function
-        , init: function myInitFunction( options ){
-            myInitFunction.parent( options );
-            this.name = options.name;
-        }
-    } );
-
-
-
-    var Boy = new Class( {
-        inherits: Human
-
-        , age: 0
-
-        // pay attention to give the function a name so you can reference it when you are calling the parent function
-        , init: function myInitFunction( options ){
-            myInitFunction.parent( options );
-            if ( options.age > 18 ) throw new Error( "Too old to be a boy!" )
-            this.age = options.age;
-        }
+    // { // MyClass instance
+    //      __proto__: { // MyClass protoype (where your items from the classdefinition are placed)
+    //         __proto__: { // the Array prototype
+    //              __proto__: {} // the prototype of the array prototype («[Object object]»)
+    //          }
+    //      }
+    // }
 
 
-        , describe: function(){
-            console.log( "Hi, my name is %s, i'm %s years old and i'm " + ( this.isAlive ? "alive :)" : "dead :(" ), this.name, this.age );
-        }
-    } );
+#### «function type» properties
 
-
-
-    var fabian = new Boy( {
-          name:     "fabian"
-        , age:      15
-        , isAlive:  true
-    } );
-
-    fabian.describe(); // Hi, my name is fabian, i'm 15 years old and i'm alive :)
-
-
-
-# working with propertiy definers
-
-since version 0.2.7 you may pass an object with object property defintions to the class module.
+Functions will be placed on the Classes prototype object, they are by default not configurable, 
+not writeable and enumerable (except for properties starting with an «_». If the property has 
+the name «init» it is treated as the classes constructor.
 
     var MyClass = new Class({
         init: function(){
-
-        }
-    } 
-    , { 
-        _values: {
-            value: {
-                name: 'john doe'
-            }
-        }
-        , name: {
-            get: function(){
-                return this._values.name;
-            }
-            , set: function(newValue){
-                this._values.name = newValue;
-            }
-            , enumerable: true
+            console.log('im executed when the class is instantiated');
         }
     });
 
-    var x = new MyClass();
+    var instance = new MyClass(); // im executed when the class is instantiated
 
-    x.name = 'michael';
-    console.log(x.name); // michael
+    console.dir(instance); // {} -> the init function is placed on the instances prototype
+    console.log(intance.init); // { [Function: init] super: [Function] }
+    console.log(instance instanceof MyClass); // true
+    console.log(instance instanceof Object); // true
+    console.log(instance instanceof Date); // false
+
+
+Note the super property on the init function, it can be used to call the constructor of the next 
+constructor function in the prototype chain.
+
+
+#### Property Descriptors
+
+The Class definition may contain property descriptor objects. You are able to create 
+configure each of the properties exactly as you like. You can create getters and setters
+and configure the configurability, the writability and the enumerability.
+
+
+    var Person = new Class({
+        init: function(options){
+            if (options && options.name !== undefined)  this.name = options.name;
+            if (options && options.age !== undefined)   this.age = options.age;
+        }   
+
+        // the private storage for the age value
+        , _storage: {
+            value: {
+                age: null
+            }
+        }
+
+        , name: '' // enumerable, writable, not configurable
+
+        , age: {
+              get: function(){ return this._storage.age; }
+            , set: function(value) {
+                if (value < 0) throw new Error('Please provide an age >= 0!');
+                else if (value > 150) throw new Error('You are too old to be processed by this system, sorry!');
+                else this._storage.age = value;
+            }
+            , enumerable: true
+            /* , configurable: false */ // defaults to false
+            /* , writable: false */ // defaults to false
+        }
+
+        , sayHelloTo: {
+            value: function(name){
+                console.log('Hello %s, my name is %s and im %s years old :)', name, this.name, this.age);
+            }
+        }
+    });
+    
+    var instance = new Person({name: 'Michael', age: 30});
+    instance.sayHelloTo('Tobias'); // Hello Tobias, my name is Michael and im 30 years old :)
+
+    // Object keys hets all enumerable keys from the instance but not its prototypes
+    console.log(Object.keys(instance)); // [ 'name' ]
+
+    // Class.keys() gets all enumerable keys from the instance and all its prototypes
+    // Class.keys -> for (var key in instance) keys.push(key);
+    console.log(Class.keys(instance)); // [ 'name', 'init', 'age' ]
+
+
+    // internal structure of the Person instance
+    {
+          name: 'Michael'   // this was set from inside the constructor function
+        , __proto__: {      // the Person prototype
+              init: function(){}
+            , _storage: {
+                age: 30     // set by the constructor, ATTENTION: this is shared across all «Person» instances
+            }
+            , name: ''      // deafult wont be changed anytime
+            , age: [Getter / Setter]
+            , sayHelloTo: function(){}
+            , __proto__: {} // default prototype 
+        }
+    }
+
+
+The example above has one problem. All instances of the «Person» class are going to share the «_storage» property.
+This is because it's a property which will not be set on the instance itself but only once on the prototype. 
+A Better solution would be the follwoing:
+
+     var Person = new Class({
+        init: function(options){
+            Object.defineProperty(this, '_storage', {value: {}});
+            Class.define(this, '_storage', {value: {}}); // alternative syntax
+            Class.deinf(this, '_storage', Class({})) // alternatove syntax
+
+           ....
+        }   
+
+        ...
+    });
+
+
 
 
 # Version History
@@ -117,3 +166,4 @@ since version 0.2.7 you may pass an object with object property defintions to th
 - 0.2.8: Removed all occurences of __proto__ in th eclass implementation, replaced the by Object.getPrototypeOf()
 - 0.3.0: Removed the deprecated «parent» property
 - 0.4.0: Removed the default value passed to a class constructor
+- 1.0.0: Complete rewrite, the implementation is now simpler, faster and more JS like. The api is not 100% compaitble with the old api.
