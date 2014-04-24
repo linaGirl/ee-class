@@ -1,0 +1,209 @@
+
+
+
+    var   Class     = require('../')
+        , util      = require('util')
+        , assert    = require('assert');
+
+
+
+    describe('[Classdefinition] A Class', function() {
+        it('should can have enumerable properties of all types', function(){
+
+            var properties = {
+                  number        : 5
+                , string        : 'not empty'
+                , bool          : true
+                , nil           : null
+                , regexp        : /nope/gi
+                , date          : new Date(0)
+                , err           : new Error('fail')
+                , buf           : new Buffer('buffering')
+                , fn            : function(){return 42;}
+                , obj           : {im:'notEmpty'}
+                , arr           : [1,3,3,7]
+            };
+
+            var   TestClass = new Class(properties)
+                , instance  = new TestClass();
+
+            Object.keys(properties).forEach(function(name){
+                assert.equal(instance[name], properties[name]);
+            });
+        });
+
+
+        it('should be able to return its __proto__', function() {
+            var   Test      = new Class({me: 'michael'})
+                , instance  = new Test();
+
+            assert.deepEqual(Class.proto(instance), {me: 'michael'});
+        });
+
+
+        it('should be able to accept property definitions', function() {
+            var   Test      = new Class({me: {value: 'michael'}})
+                , instance  = new Test();
+
+            assert.deepEqual(instance.me, 'michael');
+        });
+
+
+        it('should respect the configuration of property definers', function() {
+            var   Test      = new Class({me: {value: 'michael'}})
+                , Test2     = new Class({me: {value: 'michael', enumerable: true}})
+                , instance  = new Test()
+                , instance2 = new Test2();
+
+            assert.deepEqual(Class.keys(instance), []);
+            assert.deepEqual(Class.keys(instance2), ['me']);
+        });
+
+
+        it('should respect the configuration of property definers', function() {
+            var   Test      = new Class({me: {value: 'michael'}})
+                , Test2     = new Class({me: {value: 'michael', enumerable: true}})
+                , instance  = new Test()
+                , instance2 = new Test2();
+
+            assert.deepEqual(Class.keys(instance), []);
+            assert.deepEqual(Class.keys(instance2), ['me']);
+        });
+
+
+        it('should execute the constructor function', function() {
+            var   Test      = new Class({init: function(){ this.name = 'michael'}})
+                , instance  = new Test();
+
+            assert.deepEqual(instance, {name: 'michael'});
+        });
+
+
+        it('should accept generated property definers', function() {
+            var   Test, instance;
+
+            Test = new Class({
+                  default       : Class('default')
+                , enumerable    : Class('enumerable').Enumerable()
+                , writable      : Class('writable').Writable()
+                , configurable  : Class('configurable').Configurable()
+                , all           : Class('all').Configurable().Enumerable().Writable()
+            })
+
+            instance  = new Test();
+
+            assert.deepEqual(instance, {});
+            assert.deepEqual(Class.keys(instance), ['enumerable', 'all']);
+        });
+    });
+
+
+
+
+    describe('[Inheritance] A Class', function() {
+        it('should be able to inherit from another class', function(){
+            var   Test      = new Class({init: function(){return 2;}})
+                , Test2     = new Class({inherits: Test, init: function init(){ this.number = init.super.call(this);}})
+                , instance  = new Test2();
+
+            assert.equal(instance.number, 2);
+        });
+
+
+        it('should be able to inherit from two classes', function(){
+            var   Test      = new Class({init: function(){return 2;}})
+                , Test2     = new Class({inherits: Test, init: function init(){ return init.super.call(this);}})
+                , Test3     = new Class({inherits: Test2, init: function init(){ this.number = init.super.call(this);}})
+                , instance  = new Test3();
+
+            assert.equal(instance.number, 2);
+        });
+
+
+        it('should be able to inherit from two classes and skipping prototypes when calling super methods', function(){
+            var   Test      = new Class({init: function(){return 2;}})
+                , Test2     = new Class({inherits: Test})
+                , Test3     = new Class({inherits: Test2, init: function init(){ this.number = init.super.call(this);}})
+                , instance  = new Test3();
+
+            assert.equal(instance.number, 2);
+        });
+
+
+        it('should be able to inherit from a native JS type', function(){
+            var   Test      = new Class({inherits: Array, toJSON: Class(function(){return Array.prototype.slice.call(this);}), count: {get: function(){return this.length;}}})
+                , instance  = new Test();
+
+            instance.push('hi');
+            instance.push('my');
+            instance.push('name');
+            instance.push('is');
+            instance.push('michael');
+
+            assert.equal(instance.count, 5);
+            assert.deepEqual(instance.toJSON(), ['hi', 'my', 'name', 'is', 'michael']);
+        });
+
+
+        it('should be an instance of its constructor and its prototype constructors', function(){
+            var   Test      = new Class({inherits: Array, toJSON: Class(function(){return Array.prototype.slice.call(this);}), count: {get: function(){return this.length;}}})
+                , instance  = new Test();
+
+            assert.ok(instance instanceof Test);
+            assert.ok(instance instanceof Array);
+            assert.ok(instance instanceof Object);
+            assert.ok(!(instance instanceof Date));
+        });
+    });
+    
+
+
+    describe('[Generic Tests]', function() {
+        it('#1', function(){
+           var Person = new Class({
+                init: function(options){
+                    if (options && options.name !== undefined)  this.name = options.name;
+                    if (options && options.age !== undefined)   this.age = options.age;
+                }   
+
+                // the private storage for the age value
+                , _storage: {
+                    value: {
+                        age: null
+                    }
+                }
+
+                , name: '' // enumerable, writable, not configurable
+
+                , age: {
+                      get: function(){ return this._storage.age; }
+                    , set: function(value) {
+                        if (value < 0) throw new Error('Please provide an age >= 0!');
+                        else if (value > 150) throw new Error('You are too old to be processed by this system, sorry!');
+                        else this._storage.age = value;
+                    }
+                    , enumerable: true
+                    /* , configurable: false */ // defaults to false
+                    /* , writable: false */ // defaults to false
+                }
+
+                , sayHelloTo: {
+                    value: function(name){
+                        console.log('Hello %s, my name is %s and im %s years old :)', name, this.name, this.age);
+                    }
+                }
+            });
+            
+            var instance = new Person({name: 'Michael', age: 30});
+            instance.sayHelloTo('Tobias'); // Hello Tobias, my name is Michael and im 30 years old :)
+    
+            // Object keys hets all enumerable keys from the instance but not its prototypes
+            console.log(Object.keys(instance)); // [ 'name' ]
+
+            // Class.keys() gets all enumerable keys from the instance and all its prototypes
+            // Class.keys -> for (var key in instance) keys.push(key);
+            console.log(Class.keys(instance)); // [ 'name', 'init', 'age' ]
+        });
+    });
+
+     
