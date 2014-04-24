@@ -121,13 +121,13 @@ and configure the configurability, the writability and the enumerability.
     {
           name: 'Michael'   // this was set from inside the constructor function
         , __proto__: {      // the Person prototype
-              init: function(){}
+              init: function(){ ... }
             , _storage: {
                 age: 30     // set by the constructor, ATTENTION: this is shared across all «Person» instances
             }
             , name: ''      // deafult wont be changed anytime
             , age: [Getter / Setter]
-            , sayHelloTo: function(){}
+            , sayHelloTo: function(){ ... }
             , __proto__: {} // default prototype 
         }
     }
@@ -148,6 +148,64 @@ A Better solution would be the follwoing:
 
         ...
     });
+
+
+
+
+### Inheritance
+
+Any class may inherit from any oter class or builtin types.
+    
+    var LifeForm = new Class({
+        init: function(isAlive) {
+            Class.define(this, 'isAlive', Class(isAlive).Enumerable().Writable());
+        }
+
+        , isAlive: Class(false).Enumerable().Writable()
+    });
+
+
+    var Person = new Class({
+        inherits: LifeForm
+
+        , talk: function(){
+            console.log('Hi my name is %s, i\'m '+(this.isAlive ? 'alive :)' : 'dead :('), this.name);
+        }
+    });
+
+
+    var Boy = new Class({
+        inherits: Person
+
+        , init: function constructor(name, alive) {
+            // you need to give the function a name in order to be able to call its super
+            // you must «call» or «apply» the super function to give it the correct context
+            constructor.super.call(this, alive);
+
+            this.name = Class.define(this, 'name', Class(name).Enumerable());
+        }
+    });
+
+
+    var dylan = new Boy('Dylan', true);
+    dylan.talk(); // Hi my name is Dylan, i'm alive :)
+
+
+    // internal structure of the «dylan» Boy instanc
+    {
+          isAlive: true                     // defined by the LifeForm Class constructor
+        , name: 'Dylan'                     // defined by the Boy constructor
+        , __proto__: {                      // Boy prototype
+            init: function init(){ ... }    
+            , __proto__: {                  // Person prototype
+                __proto__: {                // LifeForm prototype
+                    isAlive: false          // property defined on the LifeForm class
+                    , init: function(){ ... }   
+                    , __proto__: {}         // defualt object prototype
+                }
+            }
+        }
+    }
 
 
 

@@ -159,7 +159,7 @@
 
 
     describe('[Generic Tests]', function() {
-        it('#1', function(){
+        it('#1 - properties', function(){
            var Person = new Class({
                 init: function(options){
                     if (options && options.name !== undefined)  this.name = options.name;
@@ -195,14 +195,48 @@
             });
             
             var instance = new Person({name: 'Michael', age: 30});
-            instance.sayHelloTo('Tobias'); // Hello Tobias, my name is Michael and im 30 years old :)
     
             // Object keys hets all enumerable keys from the instance but not its prototypes
-            console.log(Object.keys(instance)); // [ 'name' ]
+            assert.equal(Object.keys(instance).length, 1);
+            assert.equal(Class.keys(instance).length, 3);
+        });
 
-            // Class.keys() gets all enumerable keys from the instance and all its prototypes
-            // Class.keys -> for (var key in instance) keys.push(key);
-            console.log(Class.keys(instance)); // [ 'name', 'init', 'age' ]
+
+        it('#2 - inheritance', function(){
+            var LifeForm = new Class({
+                init: function(isAlive) {
+                    Class.define(this, 'isAlive', Class(isAlive).Enumerable().Writable());
+                }
+
+                , isAlive: Class(false).Enumerable().Writable()
+            });
+
+
+            var Person = new Class({
+                inherits: LifeForm
+
+                , talk: function(){
+                    console.log('Hi my name is %s, i\'m '+(this.isAlive ? 'alive :)' : 'dead :('), this.name);
+                }
+            });
+
+
+            var Boy = new Class({
+                inherits: Person
+
+                , init: function constructor(name, alive) {
+                    // you need to give the function a name in order to be able to call its super
+                    // you must «call» or «apply» the super function to give it the correct context
+                    constructor.super.call(this, alive);
+
+                    this.name = Class.define(this, 'name', Class(name).Enumerable());
+                }
+            });
+
+
+            var instance = new Boy('Dylan', true);
+
+            instance.talk(); // Hi my name is Dylan, i'm alive :)
         });
     });
 
