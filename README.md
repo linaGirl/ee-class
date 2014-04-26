@@ -54,7 +54,8 @@ the name «init» it is treated as the classes constructor.
 
     var instance = new MyClass(); // im executed when the class is instantiated
 
-    console.dir(instance); // {} -> the init function is placed on the instances prototype
+    console.dir(instance); // {} -> the init function is placed on the instances
+                           // prototype
     console.log(intance.init); // { [Function: init] super: [Function] }
     console.log(instance instanceof MyClass); // true
     console.log(instance instanceof Object); // true
@@ -91,7 +92,7 @@ and configure the configurability, the writability and the enumerability.
               get: function(){ return this._storage.age; }
             , set: function(value) {
                 if (value < 0) throw new Error('Please provide an age >= 0!');
-                else if (value > 150) throw new Error('You are too old to be processed by this system, sorry!');
+                else if (value > 150) throw new Error('You are too old, sorry!');
                 else this._storage.age = value;
             }
             , enumerable: true
@@ -101,18 +102,22 @@ and configure the configurability, the writability and the enumerability.
 
         , sayHelloTo: {
             value: function(name){
-                console.log('Hello %s, my name is %s and im %s years old :)', name, this.name, this.age);
+                console.log('Hello %s, my name is %s and im %s years old :)'
+                    , name, this.name, this.age);
             }
         }
     });
     
     var instance = new Person({name: 'Michael', age: 30});
-    instance.sayHelloTo('Tobias'); // Hello Tobias, my name is Michael and im 30 years old :)
+    instance.sayHelloTo('Tobias'); // Hello Tobias, my name is Michael and im 30 
+                                   // years old :)
 
-    // Object keys hets all enumerable keys from the instance but not its prototypes
+    // Object keys hets all enumerable keys from the instance but not its 
+    // prototypes
     console.log(Object.keys(instance)); // [ 'name' ]
 
-    // Class.keys() gets all enumerable keys from the instance and all its prototypes
+    // Class.keys() gets all enumerable keys from the instance and all its 
+    // prototypes
     // Class.keys -> for (var key in instance) keys.push(key);
     console.log(Class.keys(instance)); // [ 'name', 'init', 'age' ]
 
@@ -123,7 +128,8 @@ and configure the configurability, the writability and the enumerability.
         , __proto__: {      // the Person prototype
               init: function(){ ... }
             , _storage: {
-                age: 30     // set by the constructor, ATTENTION: this is shared across all «Person» instances
+                age: 30     // set by the constructor, ATTENTION: this is shared 
+                            // across all «Person» instances
             }
             , name: ''      // deafult wont be changed anytime
             , age: [Getter / Setter]
@@ -169,7 +175,8 @@ Any class may inherit from any oter class or builtin types.
         inherits: LifeForm
 
         , talk: function(){
-            console.log('Hi my name is %s, i\'m '+(this.isAlive ? 'alive :)' : 'dead :('), this.name);
+            console.log('Hi my name is %s, i\'m '+(this.isAlive ? 'alive :)' 
+                : 'dead :('), this.name);
         }
     });
 
@@ -178,8 +185,9 @@ Any class may inherit from any oter class or builtin types.
         inherits: Person
 
         , init: function constructor(name, alive) {
-            // you need to give the function a name in order to be able to call its super
-            // you must «call» or «apply» the super function to give it the correct context
+            // you need to give the function a name in order to be able to call 
+            // its super. you must «call» or «apply» the super function to give
+            // it the correct context
             constructor.super.call(this, alive);
 
             this.name = Class.define(this, 'name', Class(name).Enumerable());
@@ -193,13 +201,13 @@ Any class may inherit from any oter class or builtin types.
 
     // internal structure of the «dylan» Boy instanc
     {
-          isAlive: true                     // defined by the LifeForm Class constructor
+          isAlive: true            // defined by the LifeForm Class constructor
         , name: 'Dylan'                     // defined by the Boy constructor
         , __proto__: {                      // Boy prototype
             init: function init(){ ... }    
             , __proto__: {                  // Person prototype
                 __proto__: {                // LifeForm prototype
-                    isAlive: false          // property defined on the LifeForm class
+                    isAlive: false     // property defined on the LifeForm class
                     , init: function(){ ... }   
                     , __proto__: {}         // defualt object prototype
                 }
@@ -208,6 +216,12 @@ Any class may inherit from any oter class or builtin types.
     }
 
 
+
+    console.log(instance instanceof Boy);       // true
+    console.log(instance instanceof Person);    // true
+    console.log(instance instanceof LifeForm);  // true
+    console.log(instance instanceof Object);    // true
+    console.log(instance instanceof Array);     // false
 
 
 # Version History
@@ -225,3 +239,4 @@ Any class may inherit from any oter class or builtin types.
 - 0.3.0: Removed the deprecated «parent» property
 - 0.4.0: Removed the default value passed to a class constructor
 - 1.0.0: Complete rewrite, the implementation is now simpler, faster and more JS like. The api is not 100% compaitble with the old api.
+- 1.0.1: Added more test & docs

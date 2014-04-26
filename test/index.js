@@ -238,5 +238,11 @@
 
             assert.equal(instance.isAlive, true);
             assert.equal(instance.name, 'Dylan');
+
+            assert.ok(instance instanceof Boy);
+            assert.ok(instance instanceof Person);
+            assert.ok(instance instanceof LifeForm);
+            assert.ok(instance instanceof Object);
+            assert.ok(!(instance instanceof Array));
         });
     });     
