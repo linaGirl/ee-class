@@ -217,11 +217,11 @@ Any class may inherit from any oter class or builtin types.
 
 
 
-    console.log(instance instanceof Boy);       // true
-    console.log(instance instanceof Person);    // true
-    console.log(instance instanceof LifeForm);  // true
-    console.log(instance instanceof Object);    // true
-    console.log(instance instanceof Array);     // false
+    console.log(dylan instanceof Boy);       // true
+    console.log(dylan instanceof Person);    // true
+    console.log(dylan instanceof LifeForm);  // true
+    console.log(dylan instanceof Object);    // true
+    console.log(dylan instanceof Array);     // false
 
 
 # Version History
@@ -240,3 +240,4 @@ Any class may inherit from any oter class or builtin types.
 - 0.4.0: Removed the default value passed to a class constructor
 - 1.0.0: Complete rewrite, the implementation is now simpler, faster and more JS like. The api is not 100% compaitble with the old api.
 - 1.0.1: Added more test & docs
+- 1.0.2: Fixed docs
