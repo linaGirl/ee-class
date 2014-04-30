@@ -265,3 +265,92 @@
             assert.ok(!(instance instanceof Array));
         });
     });     
+
+
+
+    describe('[Static methods]', function() {
+        it('The static «Class.proto» method should return the class proto', function(){
+           var Person = new Class({
+                init: function(options){
+                    if (options && options.name !== undefined)  this.name = options.name;
+                    if (options && options.age !== undefined)   this.age = options.age;
+                }   
+
+                // the private storage for the age value
+                , _storage: {
+                    value: {
+                        age: null
+                    }
+                }
+
+                , name: '' // enumerable, writable, not configurable
+
+                , age: {
+                      get: function(){ return this._storage.age; }
+                    , set: function(value) {
+                        if (value < 0) throw new Error('Please provide an age >= 0!');
+                        else if (value > 150) throw new Error('You are too old to be processed by this system, sorry!');
+                        else this._storage.age = value;
+                    }
+                    , enumerable: true
+                    /* , configurable: false */ // defaults to false
+                    /* , writable: false */ // defaults to false
+                }
+
+                , sayHelloTo: {
+                    value: function(name){
+                        console.log('Hello %s, my name is %s and im %s years old :)', name, this.name, this.age);
+                    }
+                }
+            });
+            
+            
+            var instance = new Person({name: 'Michael', age: 30});
+            assert.equal('{"name":"","age":30}', JSON.stringify(Class.proto(instance)));
+        });
+
+        
+        it('The static «Class.implement» method should implement a class on another object', function(){
+            var Person = new Class({
+                init: function(options){
+                    if (options && options.name !== undefined)  this.name = options.name;
+                    if (options && options.age !== undefined)   this.age = options.age;
+                }   
+
+                // the private storage for the age value
+                , _storage: {
+                    value: {
+                        age: null
+                    }
+                }
+
+                , name: '' // enumerable, writable, not configurable
+
+                , age: {
+                      get: function(){ return this._storage.age; }
+                    , set: function(value) {
+                        if (value < 0) throw new Error('Please provide an age >= 0!');
+                        else if (value > 150) throw new Error('You are too old to be processed by this system, sorry!');
+                        else this._storage.age = value;
+                    }
+                    , enumerable: true
+                    /* , configurable: false */ // defaults to false
+                    /* , writable: false */ // defaults to false
+                }
+
+                , sayHelloTo: {
+                    value: function(name){
+                        console.log('Hello %s, my name is %s and im %s years old :)', name, this.name, this.age);
+                    }
+                }
+            });
+            
+            
+            var instance = new Person({name: 'Michael', age: 30})
+                , obj = Class.implement(instance, {});
+
+            assert.equal('{"name":"Michael","age":30}', JSON.stringify(obj));
+        });
+    });     
+
+
