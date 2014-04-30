@@ -239,10 +239,40 @@ a class property definition which can be used by the Class.define or Object.defi
     Class(234).enumerable().writable().configurable() // {value: 234, enumerable: true, writable: true, configurable: true}
 
 
-### Class.define()
+#### Class.define()
 
-    
+This can be used oin playe of the Object.defineProperty method.
 
+    Class.define({}, 'property_name', {value:3});
+
+#### Class.proto()
+
+Returns the prototype of a class instance
+
+    var prototype = Class.proto(instance);
+
+#### Class.keys()
+
+Returns all enumerable properties of a class instance and of all its prototypes. Object.keys does the same for only the class instance.
+
+    var keys = Class.keys(instance);
+
+
+#### Class.implement()
+
+Implements methods and properties from a classinstance on another object.
+
+    var myObject = {};
+
+    var MyClass = new Class({
+        test: function(){
+
+        }
+    });
+
+    Class.implement(new MyClass(), myObject);
+
+    console.log(myObject); // {test: function(){}}
 
 
 # Version History
