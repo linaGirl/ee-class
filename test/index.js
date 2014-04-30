@@ -95,6 +95,25 @@
             assert.deepEqual(instance, {});
             assert.deepEqual(Class.keys(instance), ['enumerable', 'all']);
         });
+
+
+
+        it('should set the correct scope in getters / setters', function(){
+            var   Test, instance;
+
+            Test = new Class({
+                age: 16
+                
+                , length: {
+                    get: function() {
+                        return this.age;
+                    }
+                }
+            })
+
+            instance  = new Test();
+            assert.equal(16, instance.length);
+        });
     });
 
 

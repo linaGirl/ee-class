@@ -147,7 +147,7 @@ A Better solution would be the follwoing:
         init: function(options){
             Object.defineProperty(this, '_storage', {value: {}});
             Class.define(this, '_storage', {value: {}}); // alternative syntax
-            Class.deinf(this, '_storage', Class({})) // alternatove syntax
+            Class.define(this, '_storage', Class({})) // alternatove syntax
 
            ....
         }   
@@ -222,6 +222,27 @@ Any class may inherit from any oter class or builtin types.
     console.log(dylan instanceof LifeForm);  // true
     console.log(dylan instanceof Object);    // true
     console.log(dylan instanceof Array);     // false
+
+
+
+### Static Methods
+
+#### Class()
+
+if the Class constructor is called without the new Keyword it doesnt create an instance of the class, it does instead return
+a class property definition which can be used by the Class.define or Object.defineProperty method.
+
+    Class(234) // {value: 234}
+    Class(true).enumerable() // {value: true, enumerable: true}
+    Class('yeah').writable() // {value: 'yeah', writable: true}
+    Class(new Error('nope')).configurable() // {value: Error, configurable: true} 
+    Class(234).enumerable().writable().configurable() // {value: 234, enumerable: true, writable: true, configurable: true}
+
+
+### Class.define()
+
+    
+
 
 
 # Version History
