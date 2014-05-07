@@ -293,3 +293,4 @@ Implements methods and properties from a classinstance on another object.
 - 1.0.1: Added more test & docs
 - 1.0.2: Fixed docs
 - 1.0.5: The class contructor function can now return an object as its instance
+- 1.0.6: The class contructor function can now return any type that is not undefined as its instance
