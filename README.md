@@ -292,3 +292,4 @@ Implements methods and properties from a classinstance on another object.
 - 1.0.0: Complete rewrite, the implementation is now simpler, faster and more JS like. The api is not 100% compaitble with the old api.
 - 1.0.1: Added more test & docs
 - 1.0.2: Fixed docs
+- 1.0.5: The class contructor function can now return an object as its instance

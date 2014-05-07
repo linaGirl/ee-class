@@ -174,6 +174,26 @@
             assert.ok(!(instance instanceof Date));
         });
     });
+
+
+    
+
+    describe('[Contructor]', function() {
+        it('A class should be able to return an object as its instance', function(){
+            var Test
+                , instance;
+
+            Test = new Class({
+                init: function() {
+                    return {id: 'obj'};
+                }
+            });
+
+            instance = new Test();
+
+            assert.equal(instance.id, 'obj');
+        });
+    });
     
 
 
@@ -308,7 +328,7 @@
             var instance = new Person({name: 'Michael', age: 30});
             assert.equal('{"name":"","age":30}', JSON.stringify(Class.proto(instance)));
         });
-
+    
         
         it('The static «Class.implement» method should implement a class on another object', function(){
             var Person = new Class({
