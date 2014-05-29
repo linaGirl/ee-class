@@ -294,3 +294,4 @@ Implements methods and properties from a classinstance on another object.
 - 1.0.2: Fixed docs
 - 1.0.5: The class contructor function can now return an object as its instance
 - 1.0.6: The class contructor function can now return any type that is not undefined as its instance
+- 1.0.7: If the class inherits from a nativa javascript object, it will map the super of the init function to it
