@@ -198,6 +198,17 @@
 
 
     describe('[Generic Tests]', function() {
+        it ('A Class should throw an error when instantiated without the new keyword', function() {
+            var a = new Class({init: function(){return 2;}});
+
+            assert.throws(
+              function() {
+                a();
+              }
+            );
+        });
+        
+
         it('#1 - properties', function(){
            var Person = new Class({
                 init: function(options){
