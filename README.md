@@ -342,4 +342,4 @@ Inspects the internal structure of the class, returns it. Is helpful for debuggi
 - 1.0.6: The class contructor function can now return any type that is not undefined as its instance
 - 1.0.7: If the class inherits from a native javascript object it will map the super of the init function to it
 - 1.0.8: If a class is instantiated without the new keyword it now throws a menaingful error
-- 1.0.8: Added the Class.inspect method
+- 1.0.9: Added the Class.inspect method
