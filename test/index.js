@@ -339,6 +339,56 @@
             var instance = new Person({name: 'Michael', age: 30});
             assert.equal('{"name":"","age":30}', JSON.stringify(Class.proto(instance)));
         });
+
+
+
+        it ('Describe the classes methods', function() {
+            var LifeForm = new Class({
+                init: function(isAlive) {
+                    Class.define(this, 'isAlive', Class(isAlive).Enumerable().Writable());
+                }
+
+                , isAlive: Class(false).Enumerable().Writable()
+
+                , die: function(){}
+            });
+
+
+            var Person = new Class({
+                inherits: LifeForm
+
+                , talk: function(){
+                    console.log('Hi my name is %s, i\'m '+(this.isAlive ? 'alive :)' : 'dead :('), this.name);
+                }
+
+                , sing: function() {}
+            });
+
+
+            var Boy = new Class({
+                inherits: Person
+
+                , init: function constructor(name, alive) {
+                    // you need to give the function a name in order to be able to call its super
+                    // you must «call» or «apply» the super function to give it the correct context
+                    constructor.super.call(this, alive);
+
+                    this.name = Class.define(this, 'name', Class(name).Enumerable());
+                }
+
+                , run: function(){}
+                , jump: function(){}
+            });
+
+
+
+            var instance = new Boy('Dylan', true);
+           
+          
+            /*console.log(JSON.stringify(util.inspect(Class.inspect(instance), {
+                depth: 10
+            })));*/
+        })
     
         
         it('The static «Class.implement» method should implement a class on another object', function(){

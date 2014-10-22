@@ -168,6 +168,7 @@ Any class may inherit from any oter class or builtin types.
         }
 
         , isAlive: Class(false).Enumerable().Writable()
+        , die: function(){}
     });
 
 
@@ -178,6 +179,8 @@ Any class may inherit from any oter class or builtin types.
             console.log('Hi my name is %s, i\'m '+(this.isAlive ? 'alive :)' 
                 : 'dead :('), this.name);
         }
+
+        , sing: function() {}
     });
 
 
@@ -192,6 +195,10 @@ Any class may inherit from any oter class or builtin types.
 
             this.name = Class.define(this, 'name', Class(name).Enumerable());
         }
+
+
+        , run: function(){}
+        , jump: function(){}
     });
 
 
@@ -275,6 +282,45 @@ Implements methods and properties from a classinstance on another object.
     console.log(myObject); // {test: function(){}}
 
 
+#### Class.inspect()
+
+Inspects the internal structure of the class, returns it. Is helpful for debugging.
+
+
+    // inspecting the class instance created in the inheritnace example above
+    var description = Class.inspect(dylan);
+
+    log(description);
+
+    // { isAlive: true,
+    //  name: 'Dylan',
+    //  super: 
+    //   { init: [Function],
+    //     jump: [Function],
+    //     run: [Function],
+    //     super: 
+    //      { sing: [Function],
+    //        talk: [Function],
+    //        super: 
+    //         { die: [Function],
+    //           init: [Function],
+    //           isAlive: false,
+    //           super: 
+    //            { super: 
+    //               { __defineGetter__: [Function],
+    //                 __defineSetter__: [Function],
+    //                 __lookupGetter__: [Function],
+    //                 __lookupSetter__: [Function],
+    //                 constructor: [Function],
+    //                 hasOwnProperty: [Function],
+    //                 isPrototypeOf: [Function],
+    //                 propertyIsEnumerable: [Function],
+    //                 toLocaleString: [Function],
+    //                 toString: [Function],
+    //                 valueOf: [Function] } } } } } }
+
+
+
 # Version History
 
 - 0.1.0: initial version
@@ -296,3 +342,4 @@ Implements methods and properties from a classinstance on another object.
 - 1.0.6: The class contructor function can now return any type that is not undefined as its instance
 - 1.0.7: If the class inherits from a native javascript object it will map the super of the init function to it
 - 1.0.8: If a class is instantiated without the new keyword it now throws a menaingful error
+- 1.0.8: Added the Class.inspect method
