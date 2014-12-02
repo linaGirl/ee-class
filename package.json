@@ -1,30 +1,36 @@
 {
-      "name"                        : "ee-class"
-    , "description"                 : "Fast prototype based javascript classes"
-    , "version"                     : "1.0.9"
-    , "homepage"                    : "https://github.com/eventEmitter/ee-class"
-    , "author"                      : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)" 
-    , "licence"                     : "mit"
-    , "repository": {
-          "url"                     : "https://github.com/eventEmitter/ee-class.git"
-        , "type"                    : "git"
-    }
-    , "engines": {
-        "node"                      : ">=v0.10.0"
-    }
-    , "bugs": {
-        "url"                       : "https://github.com/eventEmitter/ee-class/issues"
-    }
-    , "dependencies": {}
-    , "devDependencies": {
-          "mocha"                   : "1.17.x"
-    }
-    , "optionalDependencies": {}
-    , "keywords"                    : [ "class" ]
-    , "scripts": {
-        "test"                      : "node test.js"
-    }
-     , "scripts": {
-        "test"                      : "./node_modules/mocha/bin/mocha --reporter spec"
-    }
+  "name": "ee-class",
+  "description": "Fast prototype based javascript classes",
+  "version": "1.0.9",
+  "homepage": "https://github.com/eventEmitter/ee-class",
+  "author": "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)",
+  "licence": "mit",
+  "repository": {
+    "url": "https://github.com/eventEmitter/ee-class.git",
+    "type": "git"
+  },
+  "engines": {
+    "node": ">=v0.10.0"
+  },
+  "bugs": {
+    "url": "https://github.com/eventEmitter/ee-class/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "1.17.x",
+    "grunt": "~0.4.5",
+    "grunt-contrib-uglify": "~0.6.0"
+  },
+  "optionalDependencies": {},
+  "keywords": [
+    "class"
+  ],
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha --reporter spec"
+  },
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "license": "BSD-2-Clause"
 }
