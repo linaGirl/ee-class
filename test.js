@@ -1,12 +1,12 @@
 
-	
-	
 
-	var   Class 	= require( "./" )
+
+
+	var   Class 	= require( "./lib/Class" )
 		, util 		= require('util')
 		, assert 	= require( "assert" );
 
-		console.log(util.inspect(Class('visible string').enumerable(), { showHidden: true, depth: 500,  colors: true }));
+		console.log(util.inspect(Class('visible string').Enumerable(), { showHidden: true, depth: 500,  colors: true }));
 /*
 var y = Object.create(null, {id:{value:4, enumerable:true}, go: {value: function(){console.dir(1212)}}})
 	, x = Object.create(y, {name:{value:9, enumerable:true}});
@@ -21,7 +21,7 @@ return;*/
 
 	var LifeForm = new Class( {
 		inherits: Array
-		
+
 		, isAlive: false
 		, age: 0
 		, name: 'ficken'
@@ -29,7 +29,7 @@ return;*/
 		, init: function lifeform( options ){
 
 			this.isAlive = !!options.isAlive;
-			this.age = options.age;			
+			this.age = options.age;
 			this.name = options.name;
 
 			//console.log(util.inspect(this, { showHidden: true, depth: null,  colors: true }));
@@ -42,11 +42,11 @@ return;*/
 
 	var Human = new Class( {
 		inherits: LifeForm
-		
+
 
 		/*, init: function human( options ){
 			console.log('human', options);
-			
+
 			human.super.call(this, options);
 			console.log(util.inspect(this, { showHidden: true, depth: null,  colors: true }));
 		}*/
@@ -63,7 +63,7 @@ return;*/
 		, init: function boy( options ){
 
 			boy.super.call(this, options);
-			
+
 			//console.log(util.inspect(this, { showHidden: true, depth: null,  colors: true }));
 		}
 

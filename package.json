@@ -1,7 +1,7 @@
 {
   "name": "ee-class",
   "description": "Fast prototype based javascript classes",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "homepage": "https://github.com/eventEmitter/ee-class",
   "author": "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)",
   "licence": "mit",
@@ -15,18 +15,29 @@
   "bugs": {
     "url": "https://github.com/eventEmitter/ee-class/issues"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "mocha": "1.17.x",
-    "grunt": "~0.4.5",
-    "grunt-contrib-uglify": "~0.6.0"
+  "dependencies": {
+    "bower": "^1.3.12",
+    "connect": "^3.3.3",
+    "grunt-bower-requirejs": "^1.1.1",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-connect": "^0.9.0",
+    "grunt-contrib-jasmine": "^0.8.1",
+    "grunt-contrib-uglify": "^0.6.0",
+    "grunt-mocha": "^0.4.11",
+    "grunt-mocha-test": "^0.12.4",
+    "grunt-template-jasmine-requirejs": "^0.2.0",
+    "mocha": "^2.0.1",
+    "requirejs": "^2.1.15"
   },
+  "devDependencies": {},
   "optionalDependencies": {},
   "keywords": [
     "class"
   ],
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --reporter spec"
+    "test": "grunt test",
+    "idPortProcess": "netstat -tulpn | grep 8010",
+    "postinstall": "bower update"
   },
   "main": "index.js",
   "directories": {
