@@ -1,22 +1,17 @@
 # ee-class
 
-A fast prototype based Javascript Class implementation
+A fork of [eventEmitter](https://github.com/eventEmitter/ee-class)'s fast prototype based Javascript Class implementation, that is now available in the browser and node.js.
 
 ## installation
 
-    npm install ee-class
-
-## build status
-
-[![Build Status](https://travis-ci.org/eventEmitter/ee-class.png?branch=master)](https://travis-ci.org/eventEmitter/ee-class)
-
+    npm install storjarn/ee-class
 
 ## API
 
 The Class implementation is built on top of javascript prototype based inheritance and ECMA Script property descriptors.
 
 ### Constructor
-    
+
 Classes can be created using the Class function. The function expects exactly one argument, the class definition.
 
     var MyClass = new Class();
@@ -29,7 +24,7 @@ Objects & Functions on this property are handled as the prototype for the protot
 
     var MyClass = new Class({
         inherits: Array
-    }); 
+    });
 
     // { // MyClass instance
     //      __proto__: { // MyClass protoype (where your items from the classdefinition are placed)
@@ -42,8 +37,8 @@ Objects & Functions on this property are handled as the prototype for the protot
 
 #### «function type» properties
 
-Functions will be placed on the Classes prototype object, they are by default not configurable, 
-not writeable and enumerable (except for properties starting with an «_». If the property has 
+Functions will be placed on the Classes prototype object, they are by default not configurable,
+not writeable and enumerable (except for properties starting with an «_». If the property has
 the name «init» it is treated as the classes constructor.
 
     var MyClass = new Class({
@@ -62,13 +57,13 @@ the name «init» it is treated as the classes constructor.
     console.log(instance instanceof Date); // false
 
 
-Note the super property on the init function, it can be used to call the constructor of the next 
+Note the super property on the init function, it can be used to call the constructor of the next
 constructor function in the prototype chain.
 
 
 #### Property Descriptors
 
-The Class definition may contain property descriptor objects. You are able to create 
+The Class definition may contain property descriptor objects. You are able to create
 configure each of the properties exactly as you like. You can create getters and setters
 and configure the configurability, the writability and the enumerability.
 
@@ -77,7 +72,7 @@ and configure the configurability, the writability and the enumerability.
         init: function(options){
             if (options && options.name !== undefined)  this.name = options.name;
             if (options && options.age !== undefined)   this.age = options.age;
-        }   
+        }
 
         // the private storage for the age value
         , _storage: {
@@ -107,16 +102,16 @@ and configure the configurability, the writability and the enumerability.
             }
         }
     });
-    
+
     var instance = new Person({name: 'Michael', age: 30});
-    instance.sayHelloTo('Tobias'); // Hello Tobias, my name is Michael and im 30 
+    instance.sayHelloTo('Tobias'); // Hello Tobias, my name is Michael and im 30
                                    // years old :)
 
-    // Object keys hets all enumerable keys from the instance but not its 
+    // Object keys hets all enumerable keys from the instance but not its
     // prototypes
     console.log(Object.keys(instance)); // [ 'name' ]
 
-    // Class.keys() gets all enumerable keys from the instance and all its 
+    // Class.keys() gets all enumerable keys from the instance and all its
     // prototypes
     // Class.keys -> for (var key in instance) keys.push(key);
     console.log(Class.keys(instance)); // [ 'name', 'init', 'age' ]
@@ -128,19 +123,19 @@ and configure the configurability, the writability and the enumerability.
         , __proto__: {      // the Person prototype
               init: function(){ ... }
             , _storage: {
-                age: 30     // set by the constructor, ATTENTION: this is shared 
+                age: 30     // set by the constructor, ATTENTION: this is shared
                             // across all «Person» instances
             }
             , name: ''      // deafult wont be changed anytime
             , age: [Getter / Setter]
             , sayHelloTo: function(){ ... }
-            , __proto__: {} // default prototype 
+            , __proto__: {} // default prototype
         }
     }
 
 
 The example above has one problem. All instances of the «Person» class are going to share the «_storage» property.
-This is because it's a property which will not be set on the instance itself but only once on the prototype. 
+This is because it's a property which will not be set on the instance itself but only once on the prototype.
 A Better solution would be the follwoing:
 
      var Person = new Class({
@@ -150,7 +145,7 @@ A Better solution would be the follwoing:
             Class.define(this, '_storage', Class({})) // alternatove syntax
 
            ....
-        }   
+        }
 
         ...
     });
@@ -161,7 +156,7 @@ A Better solution would be the follwoing:
 ### Inheritance
 
 Any class may inherit from any oter class or builtin types.
-    
+
     var LifeForm = new Class({
         init: function(isAlive) {
             Class.define(this, 'isAlive', Class(isAlive).Enumerable().Writable());
@@ -176,7 +171,7 @@ Any class may inherit from any oter class or builtin types.
         inherits: LifeForm
 
         , talk: function(){
-            console.log('Hi my name is %s, i\'m '+(this.isAlive ? 'alive :)' 
+            console.log('Hi my name is %s, i\'m '+(this.isAlive ? 'alive :)'
                 : 'dead :('), this.name);
         }
 
@@ -188,7 +183,7 @@ Any class may inherit from any oter class or builtin types.
         inherits: Person
 
         , init: function constructor(name, alive) {
-            // you need to give the function a name in order to be able to call 
+            // you need to give the function a name in order to be able to call
             // its super. you must «call» or «apply» the super function to give
             // it the correct context
             constructor.super.call(this, alive);
@@ -211,11 +206,11 @@ Any class may inherit from any oter class or builtin types.
           isAlive: true            // defined by the LifeForm Class constructor
         , name: 'Dylan'                     // defined by the Boy constructor
         , __proto__: {                      // Boy prototype
-            init: function init(){ ... }    
+            init: function init(){ ... }
             , __proto__: {                  // Person prototype
                 __proto__: {                // LifeForm prototype
                     isAlive: false     // property defined on the LifeForm class
-                    , init: function(){ ... }   
+                    , init: function(){ ... }
                     , __proto__: {}         // defualt object prototype
                 }
             }
@@ -242,7 +237,7 @@ a class property definition which can be used by the Class.define or Object.defi
     Class(234) // {value: 234}
     Class(true).enumerable() // {value: true, enumerable: true}
     Class('yeah').writable() // {value: 'yeah', writable: true}
-    Class(new Error('nope')).configurable() // {value: Error, configurable: true} 
+    Class(new Error('nope')).configurable() // {value: Error, configurable: true}
     Class(234).enumerable().writable().configurable() // {value: 234, enumerable: true, writable: true, configurable: true}
 
 
@@ -294,19 +289,19 @@ Inspects the internal structure of the class, returns it. Is helpful for debuggi
 
     // { isAlive: true,
     //  name: 'Dylan',
-    //  super: 
+    //  super:
     //   { init: [Function],
     //     jump: [Function],
     //     run: [Function],
-    //     super: 
+    //     super:
     //      { sing: [Function],
     //        talk: [Function],
-    //        super: 
+    //        super:
     //         { die: [Function],
     //           init: [Function],
     //           isAlive: false,
-    //           super: 
-    //            { super: 
+    //           super:
+    //            { super:
     //               { __defineGetter__: [Function],
     //                 __defineSetter__: [Function],
     //                 __lookupGetter__: [Function],
@@ -343,3 +338,4 @@ Inspects the internal structure of the class, returns it. Is helpful for debuggi
 - 1.0.7: If the class inherits from a native javascript object it will map the super of the init function to it
 - 1.0.8: If a class is instantiated without the new keyword it now throws a menaingful error
 - 1.0.9: Added the Class.inspect method
+- 1.1.0: fixes tests, adds cli and browser tests as grunt tasks, removes concated all.js, add bower, adds npm script to lookup errant server pid, adds browser support
