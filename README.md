@@ -1,10 +1,14 @@
-# ee-class
+# <a name="class"> </a>Class
 
 A fork of [eventEmitter](https://github.com/eventEmitter/ee-class)'s fast prototype based Javascript Class implementation, that is now available in the browser and node.js.
 
 ## installation
 
     npm install storjarn/ee-class
+
+* [Class](#class)
+* [EventEmitter](#eventEmitter)
+* [Namespace](#namespace)
 
 ## API
 
@@ -315,6 +319,158 @@ Inspects the internal structure of the class, returns it. Is helpful for debuggi
     //                 valueOf: [Function] } } } } } }
 
 
+# <a name="eventEmitter"> </a>EventEmitter
+
+## API
+
+    var EventEmitter = require( "ee-event-emitter" );
+    var eventEmitter = new EventEmitter();
+
+    // attach listener
+    eventEmitter.on( "eventName", cb );
+
+    // attach listsner which is called once
+    eventEmitter.once( "eventName", cb );
+
+    // remove all listeners for all events
+    eventEmitter.off();
+
+    // remove listeners for specific event
+    eventEmitter.off( "eventName" );
+
+    // remove a single listener
+    eventEmitter.off( "eventName", listener );
+
+    // emit an event
+    eventEmitter.emit( "eventName", arg, arg, .... );
+
+    // get all listeners
+    eventEmitter.listener();
+
+    // get lsisteners for a specific event
+    eventEmitter.listsner( "eventName" );
+
+    // event which is emitted when an event listener is added
+    eventEmitter.on( "listener", function( eventName, listener ){} );
+
+    // event which is emitted when an event listener is removed
+    eventEmitter.on( "removeListener", function( eventName, listener ){} );
+
+
+## usage
+
+
+    var   Class             = require( "ee-class" )
+        , EventEmitter      = require( "ee-event-emitter" );
+
+
+    var Human = new Class( {
+        inherits: EventEmitter
+        , name: ""
+        , age: 29
+
+        , init: function( options ){
+            this.name = options.name;
+        }
+
+
+        , sayHello: function( to ){
+            this.emit( "startHello" );
+            console.log( "Hi %s, my name is %s, i'm %s years old.", to, this.name, this.age );
+            this.emit( "endHello" );
+        }
+    } );
+
+
+
+    var Boy = new Class( {
+        inherits: Human
+        , age: 12
+    } );
+
+
+    var fabian = new Boy( {
+        name: "Fabian"
+        , on: {
+              startHello: function(){ console.log( "starting console output:" ); }
+            , endHello: function(){ console.log( "finished console output!" ); }
+        }
+    } );
+
+
+    fabian.sayHello( "michael" );  // starting console output:
+                        // Hi my name is Fabian and i'm 12 years old.
+                        // finished console output!
+
+
+
+# <a name="namespace"> </a>Namespace
+
+## API
+
+### Functions
+
+#### Namespace#addNamespace(namespace:Namespace)
+
+adds and returns namespace:Namespace
+
+#### Namespace#addClass([className:String], klass:Class, [namespaceProperties:Object])
+
+adds and returns klass:Class with new Namespace-based properties.  Requires a *className* or klass.TypeName:String
+
+#### Namespace#getFullyQualifiedName() *(Also for **Class**)*
+
+returns fully qualified namespace name:String
+
+### Properties
+
+#### Namespace#Name
+
+returns the namespace name:String
+
+#### Namespace#ParentNamespace *(Also for **Class**)*
+
+returns fully qualified namespace name:String
+
+#### Namespace#Type *(Also for **Class**)*
+
+returns the Class type.  For namespaces in all cases, it's *Namespace* constructor.  For classes, it's the specific class constructor
+
+#### Namespace#TypeName</strong> *(Also for **Class**)*
+
+returns the instance type's name:String
+
+
+## usage
+
+
+    var Namespace = require( "ee-class/dist/Namespace.min" );
+    var namespace = new Namespace("Test", null, {hello: function(){ console.log("I'm a namespace!")}});
+    console.log(namespace.hello());  // "I'm a namespace!"
+    console.log(namespace.Name);  // "Test"
+
+    // add child namespace
+    var ChildNamespace = namespace.addNamespace(new Namespace("ChildNamespace"));
+    ChildNamespace.foo = true;
+
+    // add class
+    var TestClass = ChildNamespace.addClass("TestClass", new Class({test:true}));
+
+    // access class
+    var myClassInstance = new ChildNamespace.TestClass();
+    console.log(myClassInstance.test);  // true
+    console.log(myClassInstance.Type === TestClass === ChildNamespace.TestClass);  // true
+
+    // access child namespace
+    console.log(namespace.ChildNamespace.foo);  // true
+
+    // access parents
+    console.log(myClassInstance.Type.ParentNamespace.getFullyQualifiedName());  // 'Test.ChildNamespace'
+    console.log(myClassInstance.Type.getFullyQualifiedName());  // 'Test.ChildNamespace.TestClass'
+
+
+
+--------------------
 
 # Version History
 
