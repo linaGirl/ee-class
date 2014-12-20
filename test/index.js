@@ -5,19 +5,20 @@
     var assert;
 
     if (typeof define === 'function' && define.amd) {
-        define(['../lib/Class', '../lib/EventEmitter'], factory);
+        define(['../lib/Class', '../lib/EventEmitter', '../lib/Namespace'], factory);
     } else if (typeof exports === 'object') {
         (function(){
             var Class     = require('../lib/Class');
             var EventEmitter = require('../lib/EventEmitter');
+            var Namespace = require('../lib/Namespace');
             assert    = require('assert');
 
-            factory(Class, EventEmitter, assert);
+            factory(Class, EventEmitter, Namespace, assert);
         })();
     } else {
-        factory(Class, EventEmitter, assert);
+        factory(Class, EventEmitter, Namespace, assert);
     }
-}(this, function (Class, EventEmitter, assert) {
+}(this, function (Class, EventEmitter, Namespace, assert) {
     'use strict';
 
     assert = !!assert ? assert : false;
@@ -162,8 +163,6 @@
     });
 
 
-
-
     describe('[Inheritance] A Class', function() {
         it('should be able to inherit from another class', function(){
             var Test      = new Class({init: function(){return 2;}});
@@ -253,8 +252,6 @@
     });
 
 
-
-
     describe('[Contructor]', function() {
         it('A class should be able to return an object as its instance', function(){
             var Test, instance;
@@ -274,7 +271,6 @@
             }
         });
     });
-
 
 
     describe('[Generic Tests]', function() {
@@ -395,7 +391,6 @@
             }
         });
     });
-
 
 
     describe('[Static methods]', function() {
@@ -538,6 +533,154 @@
                 assert.equal('{"name":"Michael","age":30}', JSON.stringify(obj));
             } else {
                 expect('{"name":"Michael","age":30}').toBe(JSON.stringify(obj));
+            }
+        });
+    });
+
+
+    describe('[Namespace] A Namespace', function() {
+        var namespace, namespace2, klass, klass2;
+
+        beforeEach(function(){
+            klass = new Class({test: true, id: 'obj'});
+            klass2 = new Class({test: true});
+            klass2.TypeName = 'Test2';
+            namespace = new Namespace("TestNamespace", null, {id: 'obj'});
+            namespace2 = new Namespace("TestNamespace2", null, {id: 'literal'});
+        });
+
+        afterEach(function() {
+            klass = klass2 = namespace = namespace2 = null;
+        });
+
+        it('should be able to return an object as its instance', function(){
+            if (assert) {
+                assert.equal(new klass().id, 'obj');
+            } else {
+                expect('obj').toBe(new klass().id);
+            }
+        });
+
+        it('should be able to get a namespace\'s type', function(){
+            if (assert) {
+                assert.deepEqual(namespace.Type, Namespace);
+            } else {
+                expect(namespace.Type).toBe(Namespace);
+            }
+        });
+
+        it('should be able to add a class to itself', function(){
+            namespace.addClass("Test", klass);
+
+            if (assert) {
+                assert.deepEqual(namespace.Test, klass);
+                assert.deepEqual(klass.ParentNamespace, namespace);
+                assert.equal(new namespace.Test().test, new klass().test);
+            } else {
+                expect(namespace.Test).toBe(klass);
+                expect(namespace).toBe(klass.ParentNamespace);
+                expect(new namespace.Test().test).toBe(new klass().test);
+            }
+        });
+
+        it('should be able to get a class\' fully qualified name', function(){
+            namespace.addClass("Test", klass);
+
+            if (assert) {
+                assert.equal(klass.getFullyQualifiedName(), 'TestNamespace.Test');
+            } else {
+                expect('TestNamespace.Test').toBe(klass.getFullyQualifiedName());
+            }
+        });
+
+        it('should throw an error when adding a class without a classname', function(){
+            if (assert) {
+                assert.throws(
+                  function() {
+                    namespace.addClass(klass);
+                  }
+                );
+            } else {
+                expect(function() {
+                    namespace.addClass(klass);
+                }).toThrow();
+            }
+        });
+
+        it('should throw an error when adding a class with a class name that is already a property on the namespace', function(){
+            namespace.addClass("Test", klass);
+
+            if (assert) {
+                assert.throws(
+                  function() {
+                    namespace.addClass(klass);
+                  }
+                );
+            } else {
+                expect(function() {
+                    namespace.addClass(klass);
+                }).toThrow();
+            }
+        });
+
+        it('should be able to get a class instance\'s type', function(){
+            namespace.addClass("Test", klass);
+
+            if (assert) {
+                assert.equal(new klass().Type, klass);
+            } else {
+                expect(new klass().Type).toBe(klass);
+            }
+        });
+
+        it('should be able to get a class instance\'s type name', function(){
+            namespace.addClass("Test", klass);
+            namespace.addClass(klass2);
+
+            if (assert) {
+                assert.equal(klass.TypeName, "Test");
+                assert.equal(klass2.TypeName, "Test2");
+            } else {
+                expect(klass.TypeName).toBe("Test");
+                expect(klass2.TypeName).toBe("Test2");
+            }
+        });
+
+        it('should be able to add another namespace to itself', function(){
+            namespace.addNamespace(namespace2);
+
+            if (assert) {
+                assert.deepEqual(namespace.TestNamespace2, namespace2);
+                assert.deepEqual(namespace, namespace2.ParentNamespace);
+            } else {
+                expect(namespace.TestNamespace2).toBe(namespace2);
+                expect(namespace2.ParentNamespace).toBe(namespace);
+            }
+        });
+
+        it('should throw an error when adding a child namespace that is already on the parent namespace', function(){
+            namespace.addNamespace(namespace2);
+
+            if (assert) {
+                assert.throws(
+                  function() {
+                    namespace.addNamespace(namespace2);
+                  }
+                );
+            } else {
+                expect(function() {
+                    namespace.addNamespace(namespace2);
+                }).toThrow();
+            }
+        });
+
+        it('should be able to get a child namespace\'s fully qualified name', function(){
+            namespace.addNamespace(namespace2);
+
+            if (assert) {
+                assert.equal(namespace2.getFullyQualifiedName(), 'TestNamespace.TestNamespace2');
+            } else {
+                expect('TestNamespace.TestNamespace2').toBe(namespace2.getFullyQualifiedName());
             }
         });
     });

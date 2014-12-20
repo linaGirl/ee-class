@@ -6,16 +6,13 @@ module.exports = function(grunt) {
         concat: {
             options: {
                 separator: ';\n',
-            },
-            // all: {
-            //     src: ['lib/Class.js', 'lib/EventEmitter.js'],
-            //     dest: 'dist/all.js',
-            // }
+            }
         },
         uglify: {
             options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-                sourceMap: true
+                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */',
+                sourceMap: true,
+                preserveComments: false
             },
             Class: {
                 src: 'lib/Class.js',
@@ -24,6 +21,10 @@ module.exports = function(grunt) {
             EventEmitter: {
                 src: 'lib/EventEmitter.js',
                 dest: 'dist/EventEmitter.min.js'
+            },
+            Namespace: {
+                src: 'lib/Namespace.js',
+                dest: 'dist/Namespace.min.js'
             }
         },
         mochaTest: { //Node.js tests
@@ -47,10 +48,29 @@ module.exports = function(grunt) {
         },
         jasmine: {  //Browser tests
             test: {
-                src: 'lib/**/*.js',
+                src: [
+                    'lib/**/*.js'
+                ],
                 options: {
+                    banner: '<a href="./coverage/">Coverage</a>\n',
                     specs: 'test/index.js',
-                    helpers: 'spec/*Helper.js'
+                    helpers: 'spec/*Helper.js',
+                    template: require('grunt-template-jasmine-istanbul'),
+                    templateOptions: {
+                        coverage: 'test/coverage/coverage.json',
+                        report: [
+                            {type: 'html', options: {dir: 'test/coverage'}},
+                            {type: 'lcov', options: {dir: 'test/coverage/lcov-report'}},
+                            {type: 'cobertura', options: {dir: 'test/coverage/cobertura'}},
+                            {type: 'text-summary'}
+                        ],
+                        thresholds: {
+                            lines: 70,
+                            statements: 70,
+                            branches: 50,
+                            functions: 75
+                        }
+                    }
                 }
             }
         },
