@@ -64,6 +64,28 @@ the name «init» it is treated as the classes constructor.
 Note the super property on the init function, it can be used to call the constructor of the next
 constructor function in the prototype chain.
 
+#### «abstract» Classes
+
+Classes can be declared «abstract» by using the class definition property of «isAbstract : true».  This allows the Class to still be inherited but will throw an exception if instantiated directly using the «new» keyword.
+
+    var MyClass = new Class({
+        isAbstract: true,
+        init: function(){
+            console.log('i'll never get executed when the class is instantiated when using the new keyword directly, but will when called from another Class\' constructor by inheritance.');
+        }
+    });
+
+    var MyChildClass = new Class({
+        inherits: MyClass,
+        init: function constructor(){
+            constructor.super.call(this);
+            console.log('i'm executed too');
+        }
+    });
+
+    var instance = new MyClass(); // ERROR!!!
+    var instance2 = new MyChildClass(); // i'll never get executed when the class is instantiated when using the new keyword directly, but will when called from another Class\' constructor by inheritance.  i'm executed too
+
 
 #### Property Descriptors
 
