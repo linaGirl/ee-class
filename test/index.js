@@ -295,6 +295,22 @@
             }
         });
 
+        it ('An abstract Class should throw an error when instantiated with the new keyword', function() {
+            var a = new Class({init: function(){return 2;}, isAbstract: true});
+
+            if (assert) {
+                assert.throws(
+                  function() {
+                    a();
+                  }
+                );
+            } else {
+                expect(function() {
+                    a();
+                }).toThrow();
+            }
+        });
+
 
         it('#1 - properties', function(){
            var Person = new Class({
