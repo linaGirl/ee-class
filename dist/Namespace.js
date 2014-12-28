@@ -69,6 +69,7 @@
 
             if (parentNamespace) {
                 Class.define(self, 'ParentNamespace', Class(parentNamespace).Enumerable());
+                Class.define(parentNamespace, self.Name, Class(self).Enumerable());
             }
 
             return self;
