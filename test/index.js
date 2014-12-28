@@ -145,6 +145,9 @@
             var   Test, instance;
 
             Test = new Class({
+                init: function() {
+                    Class.define(this, "test", {get: function(){ return true; }});
+                },
                 age: 16,
                 length: {
                     get: function() {
@@ -156,8 +159,10 @@
             instance  = new Test();
             if (assert) {
                 assert.equal(16, instance.length);
+                assert.equal(true, instance.test);
             } else {
                 expect(16).toBe(instance.length);
+                expect(true).toBe(instance.test);
             }
         });
     });

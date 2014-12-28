@@ -3,6 +3,13 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        copy: {
+            lib: {
+                files: [
+                    {expand: true, src: ['./lib/*'], dest: 'dist/', filter: 'isFile', flatten: true}
+                ]
+            }
+        },
         concat: {
             options: {
                 separator: ';\n',
@@ -15,16 +22,20 @@ module.exports = function(grunt) {
                 preserveComments: false
             },
             Class: {
-                src: 'lib/Class.js',
+                src: 'dist/Class.js',
                 dest: 'dist/Class.min.js'
             },
             EventEmitter: {
-                src: 'lib/EventEmitter.js',
+                src: 'dist/EventEmitter.js',
                 dest: 'dist/EventEmitter.min.js'
             },
             Namespace: {
-                src: 'lib/Namespace.js',
+                src: 'dist/Namespace.js',
                 dest: 'dist/Namespace.min.js'
+            },
+            ReferenceObject: {
+                src: 'dist/ReferenceObject.js',
+                dest: 'dist/ReferenceObject.min.js'
             }
         },
         mochaTest: { //Node.js tests
@@ -87,6 +98,7 @@ module.exports = function(grunt) {
     });
 
     //Build
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-bower-requirejs');
@@ -106,6 +118,6 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('test', ['cliTest', 'browserTest']);
-    grunt.registerTask('build', ['bower', 'concat', 'uglify']);
+    grunt.registerTask('build', ['bower', 'copy', 'concat', 'uglify']);
 
 };
