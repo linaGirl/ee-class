@@ -18,8 +18,6 @@
 }(this, function (Class) {
     'use strict';
 
-    var log     = console.log;
-
     var ReferenceObject = new Class({
         init: function(name, props){
             for(var key in props) {
