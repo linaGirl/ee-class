@@ -1,5 +1,7 @@
 # ee-class
 
+[![Join the chat at https://gitter.im/eventEmitter/ee-class](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/eventEmitter/ee-class?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A fast prototype based Javascript Class implementation
 
 ## installation
