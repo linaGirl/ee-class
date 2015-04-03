@@ -173,6 +173,17 @@
             assert.ok(instance instanceof Object);
             assert.ok(!(instance instanceof Date));
         });
+
+
+        it('a class in an inherited class should be able to call a method in the inherited class even if the methodd was overriden by the inheriting class', function(){
+            var   Test      = new Class({val: function() {return 'base'}, bottom: function bottom() {return bottom.local.val();}, top: function top() {return this.val();}})
+                , Test2     = new Class({inherits: Test, val: function() {return 'middle'}})
+                , Test3     = new Class({inherits: Test2, val: function() {return 'top'}, bottom: function bottom() {return bottom.super.call(this);}, top: function top() {return top.super.call(this);}})
+                , instance  = new Test3();
+
+            assert.equal(instance.bottom(), 'base');
+            assert.equal(instance.top(), 'top');
+        });
     });
 
 

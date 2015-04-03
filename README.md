@@ -2,14 +2,10 @@
 
 A fast prototype based Javascript Class implementation
 
-## installation
 
-    npm install ee-class
-
-## build status
-
-[![Build Status](https://travis-ci.org/eventEmitter/ee-class.png?branch=master)](https://travis-ci.org/eventEmitter/ee-class)
-
+[![npm](https://img.shields.io/npm/dm/ee-class.svg?style=flat-square)](https://www.npmjs.com/package/ee-class)
+[![Travis](https://img.shields.io/travis/eventEmitter/ee-class.svg?style=flat-square)](https://travis-ci.org/eventEmitter/ee-class)
+[![node](https://img.shields.io/node/v/ee-class.svg?style=flat-square)](https://nodejs.org/)
 
 ## API
 
@@ -231,6 +227,38 @@ Any class may inherit from any oter class or builtin types.
     console.log(dylan instanceof Array);     // false
 
 
+If a class inherits from another class and the top class overwrites a method of the inherited class and you need to access the method in the inherited class from within a method on the inherited class you can now do this via the function.local variable.
+
+
+    var BaseClass = new Class({
+        sayHi: function() {
+            console.log('base!');
+        }
+
+        , doSayHi: function doSayHi(localVersion) {
+            if (localVersion) doSayHi.local.sayHi();
+            else this.sayHi();
+        }
+    });
+
+
+
+    var TopClass = new Class({
+        inherits: BaseClass
+
+        , sayHi: function() {
+            console.log('top!');
+        }
+    });
+
+
+
+    var instance = new TopClass();
+
+    instance.sayHi(0); // top!
+    instance.sayHi(1); // base!
+
+
 
 ### Static Methods
 
@@ -343,3 +371,4 @@ Inspects the internal structure of the class, returns it. Is helpful for debuggi
 - 1.0.7: If the class inherits from a native javascript object it will map the super of the init function to it
 - 1.0.8: If a class is instantiated without the new keyword it now throws a menaingful error
 - 1.0.9: Added the Class.inspect method
+- 1.1.0: Functions on inherited classes have now access to the local scope via the function.local variable
