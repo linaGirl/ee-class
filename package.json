@@ -21,9 +21,6 @@
     }
     , "optionalDependencies": {}
     , "keywords"                    : [ "class" ]
-    , "scripts": {
-        "test"                      : "node test.js"
-    }
      , "scripts": {
         "test"                      : "./node_modules/mocha/bin/mocha --reporter spec"
     }
