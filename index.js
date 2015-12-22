@@ -1,4 +1,9 @@
-module.exports = {
-	Class: require( "./dist/Class.min" ),
-	EventEmitter: require( "./dist/EventEmitter.min" )
-};
+var Types = [
+    'Class', 'EventEmitter', 'Namespace', 'Collection', 'ReferenceObject'
+];
+
+Types.forEach(function(type) {
+    exports[type] = require('./dist/' + type + '.min');
+});
+
+exports.Types = Types;

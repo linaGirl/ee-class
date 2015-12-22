@@ -58,9 +58,15 @@
                     return a instanceof Error;
                 });
 
+<<<<<<< HEAD
+                log.error('Cannot emit error event without listeners!');
+                log.trace(errs[0]);
+            }
+=======
 				console.warn('Emitting error event without listeners!');
 				console.trace.apply(console, errs);
 			}
+>>>>>>> 3a7ec7692cf5b1b37ed393d76726c02267490594
 
             return this;
         },
