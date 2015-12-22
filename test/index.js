@@ -1,48 +1,54 @@
 /* globals Class, EventEmitter, assert */
 /* jshint newcap: false */
-;(function (root, factory) {
+;
+(function(root, factory) {
     'use strict';
     var assert;
 
     if (typeof define === 'function' && define.amd) {
         define(['../lib/Class', '../lib/EventEmitter', '../lib/Namespace'], factory);
     } else if (typeof exports === 'object') {
-        (function(){
-            var Class     = require('../lib/Class');
+        (function() {
+            var Class = require('../lib/Class');
             var EventEmitter = require('../lib/EventEmitter');
             var Namespace = require('../lib/Namespace');
-            assert    = require('assert');
+            assert = require('assert');
 
             factory(Class, EventEmitter, Namespace, assert);
         })();
     } else {
         factory(Class, EventEmitter, Namespace, assert);
     }
-}(this, function (Class, EventEmitter, Namespace, assert) {
+}(this, function(Class, EventEmitter, Namespace, assert) {
     'use strict';
 
     assert = !!assert ? assert : false;
 
     describe('[Classdefinition] A Class', function() {
-        it('should can have enumerable properties of all types', function(){
+        it('should can have enumerable properties of all types', function() {
 
             var properties = {
-                number        : 5,
-                string        : 'not empty',
-                bool          : true,
-                nil           : null,
-                regexp        : /nope/gi,
-                date          : new Date(0),
-                err           : new Error('fail'),
+                number: 5,
+                string: 'not empty',
+                bool: true,
+                nil: null,
+                regexp: /nope/gi,
+                date: new Date(0),
+                err: new Error('fail'),
                 // , buf           : new Buffer('buffering')
-                fn            : function(){return 42;},
-                obj           : {im:'notEmpty'},
-                arr           : [1,3,3,7]
+                fn: function() {
+                    return 42;
+                },
+                obj: {
+                    im: 'notEmpty'
+                },
+                arr: [1, 3, 3, 7]
             };
 
-            var   TestClass = new Class(properties), instance  = new TestClass();
+            var TestClass = new Class(properties),
+                instance = new TestClass();
 
-            Object.keys(properties).forEach(function(name){
+            Object.keys(properties).forEach(function(name) {
                 if (assert) {
                     assert.equal(instance[name], properties[name]);
                 } else {
@@ -53,10 +59,15 @@
 
 
         it('should be able to return its __proto__', function() {
-            var   Test      = new Class({me: 'michael'}), instance  = new Test();
+            var Test = new Class({
+                    me: 'michael'
+                }),
+                instance = new Test();
 
             if (assert) {
-                assert.deepEqual(Class.proto(instance), {me: 'michael'});
+                assert.deepEqual(Class.proto(instance), {
+                    me: 'michael'
+                });
             } else {
                 expect(JSON.stringify(Class.proto(instance))).toBe('{"me":"michael"}');
             }
@@ -64,7 +75,12 @@
 
 
         it('should be able to accept property definitions', function() {
-            var   Test      = new Class({me: {value: 'michael'}}), instance  = new Test();
+            var Test = new Class({
+                    me: {
+                        value: 'michael'
+                    }
+                }),
+                instance = new Test();
 
             if (assert) {
                 assert.deepEqual(instance.me, 'michael');
@@ -75,9 +91,18 @@
 
 
         it('should respect the configuration of property definers', function() {
-            var Test      = new Class({me: {value: 'michael'}});
-            var Test2     = new Class({me: {value: 'michael', enumerable: true}});
-            var instance  = new Test();
+            var Test = new Class({
+                me: {
+                    value: 'michael'
+                }
+            });
+            var Test2 = new Class({
+                me: {
+                    value: 'michael',
+                    enumerable: true
+                }
+            });
+            var instance = new Test();
             var instance2 = new Test2();
 
             if (assert) {
@@ -91,9 +116,18 @@
 
 
         it('should respect the configuration of property definers', function() {
-            var Test      = new Class({me: {value: 'michael'}});
-            var Test2     = new Class({me: {value: 'michael', enumerable: true}});
-            var instance  = new Test();
+            var Test = new Class({
+                me: {
+                    value: 'michael'
+                }
+            });
+            var Test2 = new Class({
+                me: {
+                    value: 'michael',
+                    enumerable: true
+                }
+            });
+            var instance = new Test();
             var instance2 = new Test2();
 
             if (assert) {
@@ -107,10 +141,17 @@
 
 
         it('should execute the constructor function', function() {
-            var   Test      = new Class({init: function(){ this.name = 'michael'; }}), instance  = new Test();
+            var Test = new Class({
+                    init: function() {
+                        this.name = 'michael';
+                    }
+                }),
+                instance = new Test();
 
             if (assert) {
-                assert.deepEqual(instance, {name: 'michael'});
+                assert.deepEqual(instance, {
+                    name: 'michael'
+                });
             } else {
                 expect(JSON.stringify(instance)).toBe('{"name":"michael"}');
             }
@@ -121,14 +162,14 @@
             var Test, instance;
 
             Test = new Class({
-                default       : Class('default'),
-                enumerable    : Class('enumerable').Enumerable(),
-                writable      : Class('writable').Writable(),
-                configurable  : Class('configurable').Configurable(),
-                all           : Class('all').Configurable().Enumerable().Writable()
+                default: Class('default'),
+                enumerable: Class('enumerable').Enumerable(),
+                writable: Class('writable').Writable(),
+                configurable: Class('configurable').Configurable(),
+                all: Class('all').Configurable().Enumerable().Writable()
             });
 
-            instance  = new Test();
+            instance = new Test();
 
             if (assert) {
                 assert.deepEqual(instance, {});
@@ -141,12 +182,16 @@
 
 
 
-        it('should set the correct scope in getters / setters', function(){
-            var   Test, instance;
+        it('should set the correct scope in getters / setters', function() {
+            var Test, instance;
 
             Test = new Class({
                 init: function() {
-                    Class.define(this, "test", {get: function(){ return true; }});
+                    Class.define(this, "test", {
+                        get: function() {
+                            return true;
+                        }
+                    });
                 },
                 age: 16,
                 length: {
@@ -156,7 +201,7 @@
                 }
             });
 
-            instance  = new Test();
+            instance = new Test();
             if (assert) {
                 assert.equal(16, instance.length);
                 assert.equal(true, instance.test);
@@ -169,54 +214,94 @@
 
 
     describe('[Inheritance] A Class', function() {
-        it('should be able to inherit from another class', function(){
-            var Test      = new Class({init: function(){return 2;}});
-            var Test2     = new Class({inherits: Test, init: function init(){ this.number = init.super.call(this);}});
-            var instance  = new Test2();
-
-            if (assert) {
-                assert.equal(instance.number, 2);
-            } else {
-                expect(2).toBe(instance.number);
-            }
-        });
-
-
-        it('should be able to inherit from two classes', function(){
-            var Test      = new Class({init: function(){return 2;}});
-            var Test2     = new Class({inherits: Test, init: function init(){ return init.super.call(this);}});
-            var Test3     = new Class({inherits: Test2, init: function init(){ this.number = init.super.call(this);}});
-            var instance  = new Test3();
-
-            if (assert) {
-                assert.equal(instance.number, 2);
-            } else {
-                expect(2).toBe(instance.number);
-            }
-        });
-
-
-        it('should be able to inherit from two classes and skipping prototypes when calling super methods', function(){
-            var Test      = new Class({init: function(){return 2;}});
-            var Test2     = new Class({inherits: Test});
-            var Test3     = new Class({inherits: Test2, init: function init(){ this.number = init.super.call(this);}});
-            var instance  = new Test3();
-
-            if (assert) {
-                assert.equal(instance.number, 2);
-            } else {
-                expect(2).toBe(instance.number);
-            }
-        });
-
-
-        it('should be able to inherit from a native JS type', function(){
-            var Test      = new Class({
-                inherits: Array,
-                toJSON: Class(function(){return Array.prototype.slice.call(this);}),
-                count: {get: function(){return this.length;}}
+        it('should be able to inherit from another class', function() {
+            var Test = new Class({
+                init: function() {
+                    return 2;
+                }
             });
-            var instance  = new Test();
+            var Test2 = new Class({
+                inherits: Test,
+                init: function init() {
+                    this.number = init.super.call(this);
+                }
+            });
+            var instance = new Test2();
+
+            if (assert) {
+                assert.equal(instance.number, 2);
+            } else {
+                expect(2).toBe(instance.number);
+            }
+        });
+
+
+        it('should be able to inherit from two classes', function() {
+            var Test = new Class({
+                init: function() {
+                    return 2;
+                }
+            });
+            var Test2 = new Class({
+                inherits: Test,
+                init: function init() {
+                    return init.super.call(this);
+                }
+            });
+            var Test3 = new Class({
+                inherits: Test2,
+                init: function init() {
+                    this.number = init.super.call(this);
+                }
+            });
+            var instance = new Test3();
+
+            if (assert) {
+                assert.equal(instance.number, 2);
+            } else {
+                expect(2).toBe(instance.number);
+            }
+        });
+
+
+        it('should be able to inherit from two classes and skipping prototypes when calling super methods', function() {
+            var Test = new Class({
+                init: function() {
+                    return 2;
+                }
+            });
+            var Test2 = new Class({
+                inherits: Test
+            });
+            var Test3 = new Class({
+                inherits: Test2,
+                init: function init() {
+                    this.number = init.super.call(this);
+                }
+            });
+            var instance = new Test3();
+
+            if (assert) {
+                assert.equal(instance.number, 2);
+            } else {
+                expect(2).toBe(instance.number);
+            }
+        });
+
+
+        it('should be able to inherit from a native JS type', function() {
+            var Test = new Class({
+                inherits: Array,
+                toJSON: Class(function() {
+                    return Array.prototype.slice.call(this);
+                }),
+                count: {
+                    get: function() {
+                        return this.length;
+                    }
+                }
+            });
+            var instance = new Test();
 
             instance.push('hi');
             instance.push('my');
@@ -234,13 +319,19 @@
         });
 
 
-        it('should be an instance of its constructor and its prototype constructors', function(){
-            var Test      = new Class({
+        it('should be an instance of its constructor and its prototype constructors', function() {
+            var Test = new Class({
                 inherits: Array,
-                toJSON: Class(function(){return Array.prototype.slice.call(this);}),
-                count: {get: function(){return this.length;}}
+                toJSON: Class(function() {
+                    return Array.prototype.slice.call(this);
+                }),
+                count: {
+                    get: function() {
+                        return this.length;
+                    }
+                }
             });
-            var instance  = new Test();
+            var instance = new Test();
 
             if (assert) {
                 assert.ok(instance instanceof Test);
@@ -258,12 +349,14 @@
 
 
     describe('[Contructor]', function() {
-        it('A class should be able to return an object as its instance', function(){
+        it('A class should be able to return an object as its instance', function() {
             var Test, instance;
 
             Test = new Class({
                 init: function() {
-                    return {id: 'obj'};
+                    return {
+                        id: 'obj'
+                    };
                 }
             });
 
@@ -279,14 +372,18 @@
 
 
     describe('[Generic Tests]', function() {
-        it ('A Class should throw an error when instantiated without the new keyword', function() {
-            var a = new Class({init: function(){return 2;}});
+        it('A Class should throw an error when instantiated without the new keyword', function() {
+            var a = new Class({
+                init: function() {
+                    return 2;
+                }
+            });
 
             if (assert) {
                 assert.throws(
-                  function() {
-                    a();
-                  }
+                    function() {
+                        a();
+                    }
                 );
             } else {
                 expect(function() {
@@ -295,14 +392,19 @@
             }
         });
 
-        it ('An abstract Class should throw an error when instantiated with the new keyword', function() {
-            var a = new Class({init: function(){return 2;}, isAbstract: true});
+        it('An abstract Class should throw an error when instantiated with the new keyword', function() {
+            var a = new Class({
+                init: function() {
+                    return 2;
+                },
+                isAbstract: true
+            });
 
             if (assert) {
                 assert.throws(
-                  function() {
-                    a();
-                  }
+                    function() {
+                        a();
+                    }
                 );
             } else {
                 expect(function() {
@@ -312,11 +414,11 @@
         });
 
 
-        it('#1 - properties', function(){
-           var Person = new Class({
-                init: function(options){
-                    if (options && options.name !== undefined)  this.name = options.name;
-                    if (options && options.age !== undefined)   this.age = options.age;
+        it('#1 - properties', function() {
+            var Person = new Class({
+                init: function(options) {
+                    if (options && options.name !== undefined) this.name = options.name;
+                    if (options && options.age !== undefined) this.age = options.age;
                 },
 
                 // the private storage for the age value
@@ -329,7 +431,9 @@
                 name: '', // enumerable, writable, not configurable
 
                 age: {
-                    get: function(){ return this._storage.age; },
+                    get: function() {
+                        return this._storage.age;
+                    },
                     set: function(value) {
                         if (value < 0) throw new Error('Please provide an age >= 0!');
                         else if (value > 150) throw new Error('You are too old to be processed by this system, sorry!');
@@ -341,13 +445,16 @@
                 },
 
                 sayHelloTo: {
-                    value: function(name){
+                    value: function(name) {
                         console.log('Hello %s, my name is %s and im %s years old :)', name, this.name, this.age);
                     }
                 }
             });
 
-            var instance = new Person({name: 'Michael', age: 30});
+            var instance = new Person({
+                name: 'Michael',
+                age: 30
+            });
 
             // Object keys hets all enumerable keys from the instance but not its prototypes
             if (assert) {
@@ -360,7 +467,7 @@
         });
 
 
-        it('#2 - inheritance', function(){
+        it('#2 - inheritance', function() {
             var LifeForm = new Class({
                 init: function(isAlive) {
                     Class.define(this, 'isAlive', Class(isAlive).Enumerable().Writable());
@@ -371,8 +478,8 @@
 
             var Person = new Class({
                 inherits: LifeForm,
-                talk: function(){
-                    console.log('Hi my name is %s, i\'m '+(this.isAlive ? 'alive :)' : 'dead :('), this.name);
+                talk: function() {
+                    console.log('Hi my name is %s, i\'m ' + (this.isAlive ? 'alive :)' : 'dead :('), this.name);
                 }
             });
 
@@ -415,11 +522,11 @@
 
 
     describe('[Static methods]', function() {
-        it('The static «Class.proto» method should return the class proto', function(){
-           var Person = new Class({
-                init: function(options){
-                    if (options && options.name !== undefined)  this.name = options.name;
-                    if (options && options.age !== undefined)   this.age = options.age;
+        it('The static «Class.proto» method should return the class proto', function() {
+            var Person = new Class({
+                init: function(options) {
+                    if (options && options.name !== undefined) this.name = options.name;
+                    if (options && options.age !== undefined) this.age = options.age;
                 },
 
                 // the private storage for the age value
@@ -432,7 +539,9 @@
                 name: '', // enumerable, writable, not configurable
 
                 age: {
-                    get: function(){ return this._storage.age; },
+                    get: function() {
+                        return this._storage.age;
+                    },
                     set: function(value) {
                         if (value < 0) throw new Error('Please provide an age >= 0!');
                         else if (value > 150) throw new Error('You are too old to be processed by this system, sorry!');
@@ -444,14 +553,17 @@
                 },
 
                 sayHelloTo: {
-                    value: function(name){
+                    value: function(name) {
                         console.log('Hello %s, my name is %s and im %s years old :)', name, this.name, this.age);
                     }
                 }
             });
 
 
-            var instance = new Person({name: 'Michael', age: 30});
+            var instance = new Person({
+                name: 'Michael',
+                age: 30
+            });
             if (assert) {
                 assert.equal('{"name":"","age":30}', JSON.stringify(Class.proto(instance)));
             } else {
@@ -461,20 +573,20 @@
 
 
 
-        it ('Describe the classes methods', function() {
+        it('Describe the classes methods', function() {
             var LifeForm = new Class({
                 init: function(isAlive) {
                     Class.define(this, 'isAlive', Class(isAlive).Enumerable().Writable());
                 },
                 isAlive: Class(false).Enumerable().Writable(),
-                die: function(){}
+                die: function() {}
             });
 
 
             var Person = new Class({
                 inherits: LifeForm,
-                talk: function(){
-                    console.log('Hi my name is %s, i\'m '+(this.isAlive ? 'alive :)' : 'dead :('), this.name);
+                talk: function() {
+                    console.log('Hi my name is %s, i\'m ' + (this.isAlive ? 'alive :)' : 'dead :('), this.name);
                 },
                 sing: function() {}
             });
@@ -489,8 +601,8 @@
 
                     this.name = Class.define(this, 'name', Class(name).Enumerable().Writable());
                 },
-                run: function(){},
-                jump: function(){}
+                run: function() {},
+                jump: function() {}
             });
 
             var instance = new Boy('Dylan', true);
@@ -512,11 +624,11 @@
         });
 
 
-        it('The static «Class.implement» method should implement a class on another object', function(){
+        it('The static «Class.implement» method should implement a class on another object', function() {
             var Person = new Class({
-                init: function(options){
-                    if (options && options.name !== undefined)  this.name = options.name;
-                    if (options && options.age !== undefined)   this.age = options.age;
+                init: function(options) {
+                    if (options && options.name !== undefined) this.name = options.name;
+                    if (options && options.age !== undefined) this.age = options.age;
                 },
 
                 // the private storage for the age value
@@ -529,7 +641,9 @@
                 name: '', // enumerable, writable, not configurable
 
                 age: {
-                    get: function(){ return this._storage.age; },
+                    get: function() {
+                        return this._storage.age;
+                    },
                     set: function(value) {
                         if (value < 0) throw new Error('Please provide an age >= 0!');
                         else if (value > 150) throw new Error('You are too old to be processed by this system, sorry!');
@@ -540,14 +654,17 @@
                     /* , writable: false */ // defaults to false
                 },
                 sayHelloTo: {
-                    value: function(name){
+                    value: function(name) {
                         console.log('Hello %s, my name is %s and im %s years old :)', name, this.name, this.age);
                     }
                 }
             });
 
 
-            var instance = new Person({name: 'Michael', age: 30});
+            var instance = new Person({
+                name: 'Michael',
+                age: 30
+            });
             var obj = Class.implement(instance, {});
 
             if (assert) {
@@ -562,19 +679,28 @@
     describe('[Namespace] A Namespace', function() {
         var namespace, namespace2, klass, klass2;
 
-        beforeEach(function(){
-            klass = new Class({test: true, id: 'obj'});
-            klass2 = new Class({test: true});
+        beforeEach(function() {
+            klass = new Class({
+                test: true,
+                id: 'obj'
+            });
+            klass2 = new Class({
+                test: true
+            });
             klass2.TypeName = 'Test2';
-            namespace = new Namespace("TestNamespace", null, {id: 'obj'});
-            namespace2 = new Namespace("TestNamespace2", null, {id: 'literal'});
+            namespace = new Namespace("TestNamespace", null, {
+                id: 'obj'
+            });
+            namespace2 = new Namespace("TestNamespace2", null, {
+                id: 'literal'
+            });
         });
 
         afterEach(function() {
             klass = klass2 = namespace = namespace2 = null;
         });
 
-        it('should be able to return an object as its instance', function(){
+        it('should be able to return an object as its instance', function() {
             if (assert) {
                 assert.equal(new klass().id, 'obj');
             } else {
@@ -582,7 +708,7 @@
             }
         });
 
-        it('should be able to get a namespace\'s type', function(){
+        it('should be able to get a namespace\'s type', function() {
             if (assert) {
                 assert.deepEqual(namespace.Type, Namespace);
             } else {
@@ -590,7 +716,7 @@
             }
         });
 
-        it('should be able to add a class to itself', function(){
+        it('should be able to add a class to itself', function() {
             namespace.addClass("Test", klass);
 
             if (assert) {
@@ -604,7 +730,7 @@
             }
         });
 
-        it('should be able to get a class\' fully qualified name', function(){
+        it('should be able to get a class\' fully qualified name', function() {
             namespace.addClass("Test", klass);
 
             if (assert) {
@@ -614,12 +740,12 @@
             }
         });
 
-        it('should throw an error when adding a class without a classname', function(){
+        it('should throw an error when adding a class without a classname', function() {
             if (assert) {
                 assert.throws(
-                  function() {
-                    namespace.addClass(klass);
-                  }
+                    function() {
+                        namespace.addClass(klass);
+                    }
                 );
             } else {
                 expect(function() {
@@ -628,14 +754,14 @@
             }
         });
 
-        it('should throw an error when adding a class with a class name that is already a property on the namespace', function(){
+        it('should throw an error when adding a class with a class name that is already a property on the namespace', function() {
             namespace.addClass("Test", klass);
 
             if (assert) {
                 assert.throws(
-                  function() {
-                    namespace.addClass(klass);
-                  }
+                    function() {
+                        namespace.addClass(klass);
+                    }
                 );
             } else {
                 expect(function() {
@@ -644,7 +770,7 @@
             }
         });
 
-        it('should be able to get a class instance\'s type', function(){
+        it('should be able to get a class instance\'s type', function() {
             namespace.addClass("Test", klass);
 
             if (assert) {
@@ -654,7 +780,7 @@
             }
         });
 
-        it('should be able to get a class instance\'s type name', function(){
+        it('should be able to get a class instance\'s type name', function() {
             namespace.addClass("Test", klass);
             namespace.addClass(klass2);
 
@@ -667,7 +793,7 @@
             }
         });
 
-        it('should be able to add another namespace to itself', function(){
+        it('should be able to add another namespace to itself', function() {
             namespace.addNamespace(namespace2);
 
             if (assert) {
@@ -679,14 +805,14 @@
             }
         });
 
-        it('should throw an error when adding a child namespace that is already on the parent namespace', function(){
+        it('should throw an error when adding a child namespace that is already on the parent namespace', function() {
             namespace.addNamespace(namespace2);
 
             if (assert) {
                 assert.throws(
-                  function() {
-                    namespace.addNamespace(namespace2);
-                  }
+                    function() {
+                        namespace.addNamespace(namespace2);
+                    }
                 );
             } else {
                 expect(function() {
@@ -695,7 +821,7 @@
             }
         });
 
-        it('should be able to get a child namespace\'s fully qualified name', function(){
+        it('should be able to get a child namespace\'s fully qualified name', function() {
             namespace.addNamespace(namespace2);
 
             if (assert) {
@@ -707,4 +833,3 @@
     });
 
 }));
-

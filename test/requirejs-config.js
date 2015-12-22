@@ -20,7 +20,7 @@ require(
     [
         "../dist/Class.min", "../dist/EventEmitter.min"
     ],
-    function(Class, EventEmitter){
+    function(Class, EventEmitter) {
         window.Class = Class;
         window.EventEmitter = EventEmitter;
         // console.log(window.Class, window.EventEmitter);

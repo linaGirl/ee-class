@@ -26,6 +26,7 @@ Classes can be created using the Class function. The function expects exactly on
 
 Objects & Functions on this property are handled as the prototype for the prototype of the class you are creating.
 
+```
     var MyClass = new Class({
         inherits: Array
     });
@@ -37,6 +38,7 @@ Objects & Functions on this property are handled as the prototype for the protot
     //          }
     //      }
     // }
+```
 
 
 #### «function type» properties
@@ -45,6 +47,7 @@ Functions will be placed on the Classes prototype object, they are by default no
 not writeable and enumerable (except for properties starting with an «_». If the property has
 the name «init» it is treated as the classes constructor.
 
+```
     var MyClass = new Class({
         init: function(){
             console.log('im executed when the class is instantiated');
@@ -59,7 +62,7 @@ the name «init» it is treated as the classes constructor.
     console.log(instance instanceof MyClass); // true
     console.log(instance instanceof Object); // true
     console.log(instance instanceof Date); // false
-
+```
 
 Note the super property on the init function, it can be used to call the constructor of the next
 constructor function in the prototype chain.
@@ -68,6 +71,7 @@ constructor function in the prototype chain.
 
 Classes can be declared «abstract» by using the class definition property of «isAbstract : true».  This allows the Class to still be inherited but will throw an exception if instantiated directly using the «new» keyword.
 
+```
     var MyClass = new Class({
         isAbstract: true,
         init: function(){
@@ -85,7 +89,7 @@ Classes can be declared «abstract» by using the class definition property of �
 
     var instance = new MyClass(); // ERROR!!!
     var instance2 = new MyChildClass(); // i'll never get executed when the class is instantiated when using the new keyword directly, but will when called from another Class\' constructor by inheritance.  i'm executed too
-
+```
 
 #### Property Descriptors
 
@@ -93,7 +97,7 @@ The Class definition may contain property descriptor objects. You are able to cr
 configure each of the properties exactly as you like. You can create getters and setters
 and configure the configurability, the writability and the enumerability.
 
-
+```
     var Person = new Class({
         init: function(options){
             if (options && options.name !== undefined)  this.name = options.name;
@@ -158,12 +162,14 @@ and configure the configurability, the writability and the enumerability.
             , __proto__: {} // default prototype
         }
     }
+```
 
 
 The example above has one problem. All instances of the «Person» class are going to share the «_storage» property.
 This is because it's a property which will not be set on the instance itself but only once on the prototype.
 A Better solution would be the follwoing:
 
+```
      var Person = new Class({
         init: function(options){
             Object.defineProperty(this, '_storage', {value: {}});
@@ -175,14 +181,15 @@ A Better solution would be the follwoing:
 
         ...
     });
-
+```
 
 
 
 ### Inheritance
 
-Any class may inherit from any oter class or builtin types.
+Any class may inherit from any other class or built-in types.
 
+```
     var LifeForm = new Class({
         init: function(isAlive) {
             Class.define(this, 'isAlive', Class(isAlive).Enumerable().Writable());
@@ -251,6 +258,7 @@ Any class may inherit from any oter class or builtin types.
     console.log(dylan instanceof Object);    // true
     console.log(dylan instanceof Array);     // false
 
+```
 
 
 ### Static Methods
@@ -260,36 +268,43 @@ Any class may inherit from any oter class or builtin types.
 if the Class constructor is called without the new Keyword it doesnt create an instance of the class, it does instead return
 a class property definition which can be used by the Class.define or Object.defineProperty method.
 
+```
     Class(234) // {value: 234}
     Class(true).enumerable() // {value: true, enumerable: true}
     Class('yeah').writable() // {value: 'yeah', writable: true}
     Class(new Error('nope')).configurable() // {value: Error, configurable: true}
     Class(234).enumerable().writable().configurable() // {value: 234, enumerable: true, writable: true, configurable: true}
-
+```
 
 #### Class.define()
 
 This can be used oin playe of the Object.defineProperty method.
 
+```
     Class.define({}, 'property_name', {value:3});
+```
 
 #### Class.proto()
 
 Returns the prototype of a class instance
 
+```
     var prototype = Class.proto(instance);
+```
 
 #### Class.keys()
 
 Returns all enumerable properties of a class instance and of all its prototypes. Object.keys does the same for only the class instance.
 
+```
     var keys = Class.keys(instance);
-
+```
 
 #### Class.implement()
 
 Implements methods and properties from a classinstance on another object.
 
+```
     var myObject = {};
 
     var MyClass = new Class({
@@ -301,13 +316,13 @@ Implements methods and properties from a classinstance on another object.
     Class.implement(new MyClass(), myObject);
 
     console.log(myObject); // {test: function(){}}
-
+```
 
 #### Class.inspect()
 
 Inspects the internal structure of the class, returns it. Is helpful for debugging.
 
-
+```
     // inspecting the class instance created in the inheritnace example above
     var description = Class.inspect(dylan);
 
@@ -339,12 +354,13 @@ Inspects the internal structure of the class, returns it. Is helpful for debuggi
     //                 toLocaleString: [Function],
     //                 toString: [Function],
     //                 valueOf: [Function] } } } } } }
-
+```
 
 # <a name="eventEmitter"> </a>EventEmitter
 
 ## API
 
+```
     var EventEmitter = require( "ee-event-emitter" );
     var eventEmitter = new EventEmitter();
 
@@ -377,11 +393,11 @@ Inspects the internal structure of the class, returns it. Is helpful for debuggi
 
     // event which is emitted when an event listener is removed
     eventEmitter.on( "removeListener", function( eventName, listener ){} );
-
+```
 
 ## usage
 
-
+```
     var   Class             = require( "ee-class" )
         , EventEmitter      = require( "ee-event-emitter" );
 
@@ -423,7 +439,7 @@ Inspects the internal structure of the class, returns it. Is helpful for debuggi
     fabian.sayHello( "michael" );  // starting console output:
                         // Hi my name is Fabian and i'm 12 years old.
                         // finished console output!
-
+```
 
 
 # <a name="namespace"> </a>Namespace
@@ -465,7 +481,7 @@ returns the instance type's name:String
 
 ## usage
 
-
+```
     var Namespace = require( "ee-class/dist/Namespace.min" );
     var namespace = new Namespace("Test", null, {hello: function(){ console.log("I'm a namespace!")}});
     console.log(namespace.hello());  // "I'm a namespace!"
@@ -489,7 +505,7 @@ returns the instance type's name:String
     // access parents
     console.log(myClassInstance.Type.ParentNamespace.getFullyQualifiedName());  // 'Test.ChildNamespace'
     console.log(myClassInstance.Type.getFullyQualifiedName());  // 'Test.ChildNamespace.TestClass'
-
+```
 
 
 --------------------
