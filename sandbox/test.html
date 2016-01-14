@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <title>require.js test</title>
+        </head>
+        <body>
+            <script src="requirejs.js"></script>
+            <script>
+                requirejs.config({
+                    paths: {
+                        'bower': '../src'
+                    }
+                });
+
+
+                require(['bower/class'], function(Class) {
+                    console.log(new (new Class({name: 'winning'})));
+                });
+            </script>
+        </body>
+    </html>

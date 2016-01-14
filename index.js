@@ -1,3 +1,5 @@
+(function() {
+    'use strict';
 
-
-	module.exports = require( "./lib/class" );
+    module.exports = require('./src/class');
+})();

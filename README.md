@@ -7,6 +7,10 @@ A fast prototype based Javascript Class implementation
 [![Travis](https://img.shields.io/travis/eventEmitter/ee-class.svg?style=flat-square)](https://travis-ci.org/eventEmitter/ee-class)
 [![node](https://img.shields.io/node/v/ee-class.svg?style=flat-square)](https://nodejs.org/)
 
+
+
+
+
 ## Browser compatibility
 
 Desktop Browsers:
@@ -24,7 +28,11 @@ Mobile Browsers:
 - Android Browser 4.4.4+
 
 
-## Installation
+
+
+
+
+## Installation 
 
 using npm
 
@@ -33,6 +41,48 @@ using npm
 using bower
 
     bower i ee-class
+
+## Importing
+
+node
+
+    let Class = require('ee-class');
+
+
+
+require.js
+
+you have to configure require.js to point the bower prefix
+to the bower_components folder. this is optional, but if you 
+are using any other components of this author they will depend
+on this config for requiring other dependencies.
+
+    
+    requirejs.config({
+        paths: {
+            'bower': '/js/bower_components/'
+        }
+    });
+
+
+
+and finally load the component
+
+    require(['bower/ee-class/dist/ee-class.min'], function(Class) {
+        
+    });
+
+
+
+Browser & Vanilla
+    
+    <script src="bower/ee-class/dist/ee-class.min" />
+
+    var Class = window.ee.Class;
+
+
+
+
 
 ## API
 
