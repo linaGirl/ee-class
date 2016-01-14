@@ -7,6 +7,33 @@ A fast prototype based Javascript Class implementation
 [![Travis](https://img.shields.io/travis/eventEmitter/ee-class.svg?style=flat-square)](https://travis-ci.org/eventEmitter/ee-class)
 [![node](https://img.shields.io/node/v/ee-class.svg?style=flat-square)](https://nodejs.org/)
 
+## Browser compatibility
+
+Desktop Browsers:
+
+- Chrome 5+
+- Firefox 4+
+- Safari 5+
+- IE 9+
+- Edge
+
+Mobile Browsers:
+
+- Safari iOS 3.2
+- Chrome for Android 38
+- Android Browser 4.4.4+
+
+
+## Installation
+
+using npm
+
+    npm i ee-class
+
+using bower
+
+    bower i ee-class
+
 ## API
 
 The Class implementation is built on top of javascript prototype based inheritance and ECMA Script property descriptors.
