@@ -15,12 +15,12 @@ Desktop Browsers:
 - Firefox 4+
 - Safari 5+
 - IE 9+
-- Edge
+- Edge 25+
 
 Mobile Browsers:
 
-- Safari iOS 3.2
-- Chrome for Android 38
+- Safari iOS 3.2+
+- Chrome for Android 38+
 - Android Browser 4.4.4+
 
 
