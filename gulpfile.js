@@ -29,7 +29,7 @@
             .pipe(expect(config.js.input))
             .pipe(sourceMap.init({debug:true}))
             .pipe(concat('ee-class.js'))
-            .pipe(sourceMap.write())
+            .pipe(sourceMap.write('./maps'))
             .pipe(gulp.dest(config.js.target));
     });
 
@@ -38,8 +38,8 @@
             .pipe(expect(config.js.input))
             .pipe(sourceMap.init({debug:true}))
             .pipe(uglify())
-            .pipe(sourceMap.write())
             .pipe(concat('ee-class.min.js'))
+            .pipe(sourceMap.write('./maps'))
             .pipe(gulp.dest(config.js.target));
     });
 })();
