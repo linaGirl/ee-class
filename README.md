@@ -1,5 +1,7 @@
 # ee-class
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/eventEmitter/ee-class.svg)](https://greenkeeper.io/)
+
 A fast prototype based Javascript Class implementation
 
 
