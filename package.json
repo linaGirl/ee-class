@@ -17,13 +17,13 @@
     }
     , "dependencies": {}
     , "devDependencies": {
-          "mocha"                   : "2.x"
-        , "ee-log"                  : "0.x"
+          "mocha"                   : "^3.3.0"
+        , "ee-log"                  : "^2.0.2"
         , "gulp"                    : "3.x"
         , "gulp-concat"             : "2.x"
-        , "gulp-sourcemaps"         : "1.x"
+        , "gulp-sourcemaps"         : "^2.6.0"
         , "gulp-expect-file"        : "0.0.x"
-        , "gulp-uglify"             : "1.x"
+        , "gulp-uglify"             : "^2.1.2"
     }
     , "optionalDependencies": {}
     , "keywords"                    : ["class"]
